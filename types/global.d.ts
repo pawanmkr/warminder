@@ -1,10 +1,10 @@
-export { };
+export {};
 
-import { JwtPayload } from 'jsonwebtoken';
-import { Request } from 'express';
+import { JwtPayload } from "jsonwebtoken";
+import { Request } from "express";
 
 declare global {
   interface ExtendedRequest extends Request {
-    user: string | JwtPayload | undefined
+    user: string | JwtPayload | undefined;
   }
 }
