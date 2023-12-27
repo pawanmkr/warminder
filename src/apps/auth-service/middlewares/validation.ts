@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import Joi from "joi";
+import { Request, Response, NextFunction } from 'express';
+import Joi from 'joi';
 
 export class InputValidation {
   static validateSchema(schema: Joi.ObjectSchema) {
@@ -13,7 +13,7 @@ export class InputValidation {
   }
 
   static userRegistrationSchema = Joi.object({
-    user_type: Joi.string().valid("teacher", "student", "admin").required(),
+    user_type: Joi.string().valid('teacher', 'student', 'admin').required(),
     first_name: Joi.string().required(),
     last_name: Joi.string().required(),
     username: Joi.string()

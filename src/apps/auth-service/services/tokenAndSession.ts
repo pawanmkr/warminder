@@ -1,5 +1,5 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { Session } from "./dbServices.js";
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Session } from './dbServices.js';
 
 export class Token {
   static generateAccessToken(
@@ -12,13 +12,13 @@ export class Token {
       user_type: userType,
     };
     return jwt.sign(payload, privateKey, {
-      expiresIn: "1h",
+      expiresIn: '1h',
     });
   }
 
   static generateRefreshToken(userId: number, privateKey: string): string {
     return jwt.sign({ user_id: userId }, privateKey, {
-      expiresIn: "365d",
+      expiresIn: '365d',
     });
   }
 

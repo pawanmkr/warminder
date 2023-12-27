@@ -3,13 +3,13 @@ import {
   emailVerificationAndPasswordResetRequests,
   session,
   users,
-} from "../schema.js";
-import db from "../../../config/postgres.js";
-import { eq, sql } from "drizzle-orm";
+} from '../schema.js';
+import db from '../../../config/postgres.js';
+import { eq, sql } from 'drizzle-orm';
 
 enum UserType {
-  Contributor = "contributor",
-  JobSeeker = "job_seeker",
+  Contributor = 'contributor',
+  JobSeeker = 'job_seeker',
 }
 
 export class User {
@@ -79,7 +79,7 @@ export class User {
     const userId = fields.length + 1;
 
     return await db.execute(sql`
-      UPDATE user.users SET ${fields.join(", ")} WHERE id = $${userId};`);
+      UPDATE user.users SET ${fields.join(', ')} WHERE id = $${userId};`);
   }
 
   static async deactivateUser(userId: number) {

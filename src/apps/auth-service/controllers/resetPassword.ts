@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import crypto from "crypto";
+import { Request, Response, NextFunction } from 'express';
+import crypto from 'crypto';
 import {
   Token,
   errorInResponse,
@@ -7,8 +7,8 @@ import {
   //sendMail,
   //messageForEmailVerification,
   //messageForPasswordReset,
-} from "../utils/index.js";
-import { User, Password } from "../services/dbServices.js";
+} from '../utils/index.js';
+import { User, Password } from '../services/dbServices.js';
 
 const TOKEN_LENGTH = 32;
 
@@ -26,7 +26,7 @@ export async function generatePasswordResetToken(
     });
   }
 
-  const token = crypto.randomBytes(TOKEN_LENGTH).toString("hex");
+  const token = crypto.randomBytes(TOKEN_LENGTH).toString('hex');
   const expiry = Token.generateEpochTimestampInHours(24);
 
   await Password.registerResetRequest(email, token, expiry);
@@ -52,28 +52,28 @@ export async function confirmPasswordReset(
 ) {
   const { password, confirm_password, reset_token } = req.body;
   if (password !== confirm_password) {
-    return errorInResponse(res, 400, "Entered passwords do not match");
+    return errorInResponse(res, 400, 'Entered passwords do not match');
   }
 
   const result = await Password.findResetRequestByToken(reset_token);
   if (!result[0]) {
-    return errorInResponse(res, 404, "Invalid token provided");
+    return errorInResponse(res, 404, 'Invalid token provided');
   }
 
   const now = new Date();
   if (now.getTime() > result[0].expiry) {
-    return errorInResponse(res, 406, "Link expired! Please try again");
+    return errorInResponse(res, 406, 'Link expired! Please try again');
   }
 
   const user = await User.findExistingUser(null, result[0].email);
-  if (!user) return errorInResponse(res, 500, "Internal Server Error");
+  if (!user) return errorInResponse(res, 500, 'Internal Server Error');
 
   await User.updatePassword(user.user_id, hashPassword(password));
 
   await Password.deleteResetRequest(user.email);
 
   res.status(201).json({
-    message: "Password changed Succesfully",
+    message: 'Password changed Succesfully',
   });
 
   next();

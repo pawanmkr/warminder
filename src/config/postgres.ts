@@ -1,10 +1,10 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { pgSchema } from "drizzle-orm/pg-core";
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { pgSchema } from 'drizzle-orm/pg-core';
 
-import pkg from "pg";
+import pkg from 'pg';
 const { Pool } = pkg;
 
-import config from "../../configs/config.js";
+import config from '../../configs/config.js';
 
 const pool = new Pool({
   user: config.database.username,
@@ -17,7 +17,7 @@ const pool = new Pool({
 
 const db = drizzle(pool);
 
-export const contributorSchema = pgSchema("contributor");
-export const jobSeekerSchema = pgSchema("job_seeker");
+export const contributorSchema = pgSchema('contributor');
+export const jobSeekerSchema = pgSchema('job_seeker');
 
 export default db;
