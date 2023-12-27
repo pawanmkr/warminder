@@ -1,9 +1,10 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 const config = {
+  env: process.env.ENVIRONMENT,
   port: 10000,
-  jwtSecret: 'lakjdsfkajsdnflaoidkjfaisdfjkasdf',
+  jwtSecret: "lakjdsfkajsdnflaoidkjfaisdfjkasdf",
   database: {
     host: process.env.POSTGRES_HOST,
     username: process.env.POSTGRES_USERNAME,

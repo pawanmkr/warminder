@@ -1,14 +1,14 @@
-import crypto from 'crypto';
-import { NextFunction, Request, Response } from 'express';
-import { Token, errorInResponse } from '../utils/index.js';
-import { EmailVerification, User } from '../services/dbServices.js';
+import crypto from "crypto";
+import { NextFunction, Request, Response } from "express";
+import { Token, errorInResponse } from "../utils/index.js";
+import { EmailVerification, User } from "../services/dbServices.js";
 // import { messageForEmailVerification, sendMail } from "../utils/index.js";
 
 const TOKEN_LENGTH = 32;
 
 export async function sendEmailVerificationLink(email: string) {
-  const token = crypto.randomBytes(TOKEN_LENGTH).toString('hex');
-  const expiry = Token.generateEpochTimestampInHours(24);
+  const token = crypto.randomBytes(TOKEN_LENGTH).toString("hex");
+  const expiry = BigInt(Token.generateEpochTimestampInHours(24));
   await EmailVerification.saveEmailForVerification(email, token, expiry);
 
   // const verificationLink = `${process.env.BASE_API_URL}/email/verify/confirm?token=${token}`;
@@ -31,18 +31,18 @@ export async function confirmEmailVerification(
   const token = req.query.token as string;
   const result =
     await EmailVerification.findEmailVerificationRequestByToken(token);
-  if (!result) return errorInResponse(res, 404, 'Invalid Token');
+  if (!result) return errorInResponse(res, 404, "Invalid Token");
 
   const now = new Date();
   if (result.expiry < now.getTime()) {
-    return errorInResponse(res, 400, 'Verification Token Expired');
+    return errorInResponse(res, 400, "Verification Token Expired");
   }
 
   await EmailVerification.deleteEmailVerificationRequest(result.email);
   await User.updateEmailVerificationStatus(result.email);
 
   res.status(201).json({
-    message: 'Email Verified Succesfully',
+    message: "Email Verified Succesfully",
   });
   next();
 }

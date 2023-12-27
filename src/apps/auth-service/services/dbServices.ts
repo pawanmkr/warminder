@@ -3,14 +3,9 @@ import {
   emailVerificationAndPasswordResetRequests,
   session,
   users,
-} from '../schema.js';
-import db from '../../../config/postgres.js';
-import { eq, sql } from 'drizzle-orm';
-
-enum UserType {
-  Contributor = 'contributor',
-  JobSeeker = 'job_seeker',
-}
+} from "../schema.js";
+import db from "../../../config/postgres.js";
+import { eq, sql } from "drizzle-orm";
 
 export class User {
   static async findExistingUser(userId?: number | null, email?: string | null) {
@@ -26,7 +21,6 @@ export class User {
   }
 
   static async registerNewUser(
-    userType: UserType,
     name: string,
     email: string,
     phone: string,
@@ -34,8 +28,9 @@ export class User {
   ) {
     const res = await db
       .insert(users)
-      .values({ userType, name, email, phone, password })
+      .values({ name: name, email: email, phone: phone, password: password })
       .returning();
+
     return res[0];
   }
 
@@ -65,7 +60,6 @@ export class User {
         email: users.email,
         phone: users.phone,
         emailVerified: users.emailVerified,
-        userType: users.userType,
       })
       .from(users)
       .where(eq(users.id, id));
@@ -79,7 +73,7 @@ export class User {
     const userId = fields.length + 1;
 
     return await db.execute(sql`
-      UPDATE user.users SET ${fields.join(', ')} WHERE id = $${userId};`);
+      UPDATE user.users SET ${fields.join(", ")} WHERE id = $${userId};`);
   }
 
   static async deactivateUser(userId: number) {
@@ -100,7 +94,7 @@ export class Session {
     return await db.select().from(session).where(eq(session.userId, id));
   }
 
-  static async grantNewSession(token: string, expiry: number, userId: number) {
+  static async grantNewSession(token: string, expiry: bigint, userId: number) {
     return await db
       .insert(session)
       .values({ token, expiry, userId })
@@ -113,7 +107,7 @@ export class Password {
   static async registerResetRequest(
     email: string,
     token: string,
-    expiry: number,
+    expiry: bigint,
   ) {
     return await db
       .insert(emailVerificationAndPasswordResetRequests)
@@ -141,7 +135,7 @@ export class EmailVerification {
   static async saveEmailForVerification(
     email: string,
     token: string,
-    expiry: number,
+    expiry: bigint,
   ) {
     return await db
       .insert(emailVerificationAndPasswordResetRequests)

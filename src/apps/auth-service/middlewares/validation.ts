@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import Joi from 'joi';
+import { Request, Response, NextFunction } from "express";
+import Joi from "joi";
 
 export class InputValidation {
   static validateSchema(schema: Joi.ObjectSchema) {
@@ -13,24 +13,13 @@ export class InputValidation {
   }
 
   static userRegistrationSchema = Joi.object({
-    user_type: Joi.string().valid('teacher', 'student', 'admin').required(),
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required(),
-    username: Joi.string()
-      .min(4)
-      .pattern(/^[a-z0-9.?_?]+$/)
-      .trim()
-      .required(),
+    name: Joi.string().required(),
     email: Joi.string().email().trim().required(),
+    phone: Joi.string().length(10).optional(),
     password: Joi.string().min(6).required(),
   });
 
   static userLoginSchema = Joi.object({
-    username: Joi.string()
-      .min(4)
-      .pattern(/^[a-z0-9.?_?]+$/)
-      .trim()
-      .optional(),
     email: Joi.string().email().trim().optional(),
     password: Joi.string().min(6).required(),
   });
@@ -65,18 +54,23 @@ export class InputValidation {
   static validateUserRegistration = InputValidation.validateSchema(
     InputValidation.userRegistrationSchema,
   );
+
   static validateUserLogin = InputValidation.validateSchema(
     InputValidation.userLoginSchema,
   );
+
   static validateEmail = InputValidation.validateSchema(
     InputValidation.emailSchema,
   );
+
   static validatePassword = InputValidation.validateSchema(
     InputValidation.passwordConfirmSchema,
   );
+
   static validateArchivedBy = InputValidation.validateSchema(
     InputValidation.userArchiveSchema,
   );
+
   static validateUserUpdate = InputValidation.validateSchema(
     InputValidation.userUpdateSchema,
   );

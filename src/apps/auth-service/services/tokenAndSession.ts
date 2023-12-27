@@ -1,24 +1,20 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import { Session } from './dbServices.js';
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { Session } from "./dbServices.js";
 
 export class Token {
-  static generateAccessToken(
-    userId: number,
-    userType: string,
-    privateKey: string,
-  ): string {
+  static generateAccessToken(userId: number, privateKey: string): string {
     const payload: JwtPayload = {
       user_id: userId,
-      user_type: userType,
     };
+
     return jwt.sign(payload, privateKey, {
-      expiresIn: '1h',
+      expiresIn: "1h",
     });
   }
 
   static generateRefreshToken(userId: number, privateKey: string): string {
     return jwt.sign({ user_id: userId }, privateKey, {
-      expiresIn: '365d',
+      expiresIn: "365d",
     });
   }
 
@@ -39,17 +35,12 @@ export class Token {
     return currentDate.getTime();
   }
 
-  static async createNewSession(
-    id: number,
-    userType: string,
-    privateKey: string,
-  ) {
-    const accessToken = this.generateAccessToken(id, userType, privateKey);
+  static async createNewSession(id: number, privateKey: string) {
+    const accessToken = this.generateAccessToken(id, privateKey);
     const refreshToken = this.generateRefreshToken(id, privateKey);
 
-    const expiry = this.generateEpochTimestampInDays(365);
+    const expiry = BigInt(this.generateEpochTimestampInDays(365));
 
-    // saving session details to db
     await Session.grantNewSession(refreshToken, expiry, id);
 
     return {
