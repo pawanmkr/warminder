@@ -1,0 +1,1 @@
+ALTER TABLE "user"."email_verification_and_password_reset_request" DROP CONSTRAINT "email_verification_and_password_reset_request_email_unique";

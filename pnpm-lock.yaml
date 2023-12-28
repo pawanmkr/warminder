@@ -32,6 +32,9 @@ dependencies:
   morgan:
     specifier: ^1.10.0
     version: 1.10.0
+  nodemailer:
+    specifier: ^6.9.7
+    version: 6.9.7
   pg:
     specifier: ^8.11.3
     version: 8.11.3
@@ -55,6 +58,9 @@ devDependencies:
   "@types/node":
     specifier: ^20.10.5
     version: 20.10.5
+  "@types/nodemailer":
+    specifier: ^6.4.14
+    version: 6.4.14
   "@types/pg":
     specifier: ^8.10.9
     version: 8.10.9
@@ -3728,6 +3734,15 @@ packages:
       }
     dependencies:
       undici-types: 5.26.5
+
+  /@types/nodemailer@6.4.14:
+    resolution:
+      {
+        integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==,
+      }
+    dependencies:
+      "@types/node": 20.10.5
+    dev: true
 
   /@types/pg@8.10.9:
     resolution:
@@ -8333,6 +8348,14 @@ packages:
       {
         integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==,
       }
+    dev: false
+
+  /nodemailer@6.9.7:
+    resolution:
+      {
+        integrity: sha512-rUtR77ksqex/eZRLmQ21LKVH5nAAsVicAtAYudK7JgwenEDZ0UIQ1adUGqErz7sMkWYxWTTU1aeP2Jga6WQyJw==,
+      }
+    engines: { node: ">=6.0.0" }
     dev: false
 
   /noop-fn@1.0.0:
