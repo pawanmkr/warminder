@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import config from "../../../../configs/config.js";
 import { ExtendedRequest } from "../../../shared/types.js";
 
@@ -15,7 +15,7 @@ export default async function verifyJwtToken(
     jwt.verify(
       token,
       config.jwtSecret,
-      (err: jwt.VerifyErrors | null, user: string | JwtPayload | undefined) => {
+      (err: jwt.VerifyErrors | null, user: any) => {
         if (err) {
           console.error(err);
           return res

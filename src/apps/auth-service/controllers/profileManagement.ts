@@ -1,50 +1,60 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { User } from "../services/dbServices.js";
-import { errorInResponse } from "../utils/index.js";
+import { ExtendedRequest } from "../../../shared/types.js";
 
-export async function getUserProfile(req: Request, res: Response) {
-  const userId = parseInt(req.query.user_id as string);
+export async function getUser(req: ExtendedRequest, res: Response) {
+  const userId = parseInt(req.params.id);
+
   const user = await User.getUserById(userId);
-  if (!user[0]) {
-    return errorInResponse(res, 404, "User does not exists");
-  } else {
-    return res.status(200).json({
-      userId: user[0].id,
-      name: user[0].name,
-      email: user[0].email,
-      emailVerified: user[0].emailVerified,
-    });
+  if (!user) {
+    return res.status(404).send("User does not exists");
   }
+
+  if (req.user && req.user.user_id != user.id) {
+    return res.status(404).send("Invalid Credentials");
+  }
+
+  return res.status(200).json({
+    userId: user.id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    emailVerified: user.emailVerified,
+  });
 }
 
-export async function updateUserProfile(req: Request, res: Response) {
-  const userId = parseInt(req.query.user_id as string);
+export async function updateUser(req: ExtendedRequest, res: Response) {
+  const userId = parseInt(req.params.id);
 
-  const fields = Object.entries(req.body).map(([key], index) => {
-    return `${key} = $${index + 1}`;
-  });
+  if (req.user && req.user.user_id != userId) {
+    return res.status(404).send("Invalid Credentials");
+  }
 
-  const values: string[] = Object.entries(req.body).map(([values]) => {
-    return values as string;
-  });
+  const fields = req.body;
+  fields["updatedAt"] = new Date();
 
-  fields.push(`updated_at = $${fields.length + 1}`);
-  values.push(new Date().toISOString().replace("T", " ").replace("Z", " "));
-  values.push(userId.toString());
-
-  await User.updateUser(fields);
+  await User.updateUser(fields, userId);
   return res.status(201).send("Fields updated succesfully");
 }
 
-export async function deactivateUser(req: Request, res: Response) {
-  const userId = parseInt(req.query.user_id as string);
+export async function deactivateUser(req: ExtendedRequest, res: Response) {
+  const userId = parseInt(req.params.id);
+
+  if (req.user && req.user.user_id != userId) {
+    return res.status(404).send("Invalid Credentials");
+  }
 
   await User.deactivateUser(userId);
   return res.status(201).send("Account Deactivated Sucessfully!");
 }
 
-export async function deleteUser(req: Request, res: Response) {
-  const userId = parseInt(req.query.user_id as string);
+export async function deleteUser(req: ExtendedRequest, res: Response) {
+  const userId = parseInt(req.params.id);
+
+  if (req.user && req.user.user_id != userId) {
+    return res.status(404).send("Invalid Credentials");
+  }
+
   await User.deleteUser(userId);
   return res.status(201).send("Deletion succesfull");
 }
