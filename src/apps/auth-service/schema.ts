@@ -19,6 +19,7 @@ export const users = userSchema.table("users", {
   password: text("password").notNull(),
   emailVerified: boolean("email_verified").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at"),
 });
 
 export const emailVerificationAndPasswordResetRequests = userSchema.table(

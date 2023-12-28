@@ -34,21 +34,11 @@ export class InputValidation {
     reset_token: Joi.string().required(),
   });
 
-  static userArchiveSchema = Joi.object({
-    archived_by: Joi.required(),
-  });
-
   static userUpdateSchema = Joi.object({
-    first_name: Joi.string().optional(),
-    last_name: Joi.string().optional(),
-    username: Joi.string()
-      .min(4)
-      .pattern(/^[a-z0-9.?_?]+$/)
-      .trim()
-      .optional(),
+    name: Joi.string().optional(),
     email: Joi.string().email().trim().optional(),
+    phone: Joi.string().optional().length(10),
     password: Joi.string().min(6).optional(),
-    updated_by: Joi.required(),
   });
 
   static validateUserRegistration = InputValidation.validateSchema(
@@ -65,10 +55,6 @@ export class InputValidation {
 
   static validatePassword = InputValidation.validateSchema(
     InputValidation.passwordConfirmSchema,
-  );
-
-  static validateArchivedBy = InputValidation.validateSchema(
-    InputValidation.userArchiveSchema,
   );
 
   static validateUserUpdate = InputValidation.validateSchema(

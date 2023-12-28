@@ -9,10 +9,10 @@ import {
   confirmPasswordReset,
   sendMagicLink,
   confirmEmailVerification,
-  getUserProfile,
-  updateUserProfile,
-  //deleteUserProfile,
-  //archiveUserProfile,
+  getUser,
+  updateUser,
+  deleteUser,
+  deactivateUser,
 } from "./controllers/index.js";
 
 export const authRouter = Router();
@@ -35,17 +35,12 @@ authRouter
   .get("/email/verify/confirm", confirmEmailVerification)
 
   // PROTECTED ROUTES
-  .get("/user/profile", verifyJwtToken, getUserProfile)
+  .get("/user/:id", verifyJwtToken, getUser)
   .put(
-    "/user/profile",
+    "/user/:id",
     InputValidation.validateUserUpdate,
     verifyJwtToken,
-    updateUserProfile,
+    updateUser,
   )
-  .put(
-    "/user/profile/archive",
-    InputValidation.validateArchivedBy,
-    verifyJwtToken,
-    //archiveUserProfile,
-  );
-//.delete("/user/profile", verifyJwtToken, deleteUserProfile);
+  .get("/user/deactivate/:id", verifyJwtToken, deactivateUser)
+  .delete("/user/:id", verifyJwtToken, deleteUser);

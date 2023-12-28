@@ -5,7 +5,8 @@ import {
   users,
 } from "../schema.js";
 import db from "../../../config/postgres.js";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
+//import { UserUpdate } from "../../../shared/types.js";
 
 export class User {
   static async findExistingUser(userId?: number | null, email?: string | null) {
@@ -53,7 +54,7 @@ export class User {
   }
 
   static async getUserById(id: number) {
-    return await db
+    const res = await db
       .select({
         id: users.id,
         name: users.id,
@@ -63,17 +64,16 @@ export class User {
       })
       .from(users)
       .where(eq(users.id, id));
+
+    return res[0];
   }
 
-  static async updateUser(fields: string[]) {
-    /*
-     *  CONTEXT
-     *  fields.length + 1 is the user_id which has been attached/pushed in it
-     */
-    const userId = fields.length + 1;
-
-    return await db.execute(sql`
-      UPDATE user.users SET ${fields.join(", ")} WHERE id = $${userId};`);
+  static async updateUser(fields: any, id: number) {
+    return await db
+      .update(users)
+      .set(fields)
+      .where(eq(users.id, id))
+      .returning();
   }
 
   static async deactivateUser(userId: number) {

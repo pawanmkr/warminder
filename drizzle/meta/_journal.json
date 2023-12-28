@@ -15,6 +15,13 @@
       "when": 1703735528645,
       "tag": "0001_adorable_brother_voodoo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1703748246043,
+      "tag": "0002_small_blackheart",
+      "breakpoints": true
     }
   ]
 }
