@@ -5,11 +5,10 @@ import { Session } from "../services/dbServices.js";
 import config from "../../../../configs/config.js";
 
 export async function verifyAndRefreshToken(req: Request, res: Response) {
-  const { refresh_token } = req.body;
+  const { refreshToken } = req.body;
 
-  jwt.verify(refresh_token, config.jwtSecret, async (err: any, user: any) => {
+  jwt.verify(refreshToken, config.jwtSecret, async (err: any, user: any) => {
     if (err) {
-      console.log("got an error");
       return res.status(403).json({
         error: "The token has been tampered",
       });

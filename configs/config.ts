@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const config = {
+  baseApiUrl: process.env.BASE_API_URL,
   env: process.env.ENVIRONMENT,
   port: 10000,
   jwtSecret: "lakjdsfkajsdnflaoidkjfaisdfjkasdf",
@@ -23,6 +24,10 @@ const config = {
       port: process.env.SMTP_PORT,
       username: process.env.SMTP_USERNAME,
       password: process.env.SMTP_PASSWORD,
+    },
+    zoho: {
+      mail: process.env.ZOHOMAIL,
+      password: process.env.ZOHOMAIL_PASSWORD,
     },
   },
 };

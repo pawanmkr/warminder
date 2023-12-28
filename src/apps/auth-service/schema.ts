@@ -25,7 +25,7 @@ export const emailVerificationAndPasswordResetRequests = userSchema.table(
   "email_verification_and_password_reset_request",
   {
     id: serial("id").primaryKey(),
-    email: text("email").unique().notNull(),
+    email: text("email").notNull(),
     token: text("token").unique().notNull(),
     expiry: bigint("expiry", { mode: "bigint" }).notNull(),
     created_at: timestamp("created_at").defaultNow().notNull(),
