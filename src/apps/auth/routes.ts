@@ -2,17 +2,17 @@ import { Router } from "express";
 import verifyJwtToken from "./middlewares/tokenVerification.js";
 import { InputValidation } from "./middlewares/validation.js";
 import {
-  registerNewUser,
+  register_new_user,
   login,
-  generatePasswordResetToken,
+  generate_password_reset_token,
   verifyAndRefreshToken,
-  confirmPasswordReset,
+  confirm_password_reset,
   sendMagicLink,
   confirmEmailVerification,
-  getUser,
-  updateUser,
-  deleteUser,
-  deactivateUser,
+  get_user,
+  update_user,
+  delete_user,
+  deactivate_user,
 } from "./controllers/index.js";
 
 /**
@@ -24,18 +24,22 @@ export const authRouter = Router();
  * Routes for user registration, login, and token management:
  */
 authRouter
-  .post("/register", InputValidation.validateUserRegistration, registerNewUser)
+  .post(
+    "/register",
+    InputValidation.validateUserRegistration,
+    register_new_user,
+  )
   .post("/login", InputValidation.validateUserLogin, login)
   .post("/token/refresh", verifyAndRefreshToken)
   .post(
     "/password/reset/request",
     InputValidation.validateEmail,
-    generatePasswordResetToken,
+    generate_password_reset_token,
   )
   .post(
     "/password/reset/confirm",
     InputValidation.validatePassword,
-    confirmPasswordReset,
+    confirm_password_reset,
   )
   .post("/email/verify/request", InputValidation.validateEmail, sendMagicLink)
   .get("/email/verify/confirm", confirmEmailVerification);
@@ -44,12 +48,12 @@ authRouter
  * Protected routes requiring a valid JWT token for authentication:
  */
 authRouter
-  .get("/user/:id", verifyJwtToken, getUser)
+  .get("/user/:id", verifyJwtToken, get_user)
   .put(
     "/user/:id",
     InputValidation.validateUserUpdate,
     verifyJwtToken,
-    updateUser,
+    update_user,
   )
-  .get("/user/deactivate/:id", verifyJwtToken, deactivateUser)
-  .delete("/user/:id", verifyJwtToken, deleteUser);
+  .get("/user/deactivate/:id", verifyJwtToken, deactivate_user)
+  .delete("/user/:id", verifyJwtToken, delete_user);

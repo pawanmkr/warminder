@@ -19,8 +19,8 @@ export async function add_company(req: ExtendedRequest, res: Response) {
     throw new Error("Internal server error: User not found");
   }
 
-  const userExists = await User.findExistingUser(req.user.user_id, null);
-  if (!userExists) {
+  const user_exists = await User.find_existing_user(req.user.user_id, null);
+  if (!user_exists) {
     return res.status(404).send("User Does Not Exists");
   }
 
@@ -28,10 +28,11 @@ export async function add_company(req: ExtendedRequest, res: Response) {
 
   // Save company and related data to the database
   const company = await Company.save_company(name, location);
-  await Company.save_email(email, company[0].id, req.user.user_id);
+
+  await Company.save_email(email, company.id, req.user.user_id);
 
   res.json({
-    id: company[0].id,
+    id: company.id,
     ...req.body, // Include company details in the response
   });
 }

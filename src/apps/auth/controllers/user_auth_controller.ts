@@ -4,36 +4,38 @@ import { sendEmailVerificationLink } from "../../../services/email.js";
 import { User } from "../services/dbServices.js";
 import config from "../../../../configs/config.js";
 
-const jwtSecretKey = config.jwtSecret;
-
-export async function registerNewUser(
+export async function register_new_user(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
-  const { name, email, phone, password } = req.body;
-  const hashedPassword = hashPassword(password);
+  const { name, email, country_code, phone, password } = req.body;
+  const hashed_password = hashPassword(password);
 
-  const existingUser = await User.findExistingUser(null, email);
-  if (existingUser) {
+  const existing_user = await User.find_existing_user(null, email);
+  if (existing_user) {
     return res.status(409).send("Email Already Exists! Please Login");
   }
 
-  const registeredUser = await User.registerNewUser(
+  const registeredUser = await User.register_new_user(
     name,
     email,
+    country_code,
     phone,
-    hashedPassword,
+    hashed_password,
   );
 
-  const session = await Token.createNewSession(registeredUser.id, jwtSecretKey);
+  const session = await Token.create_new_session(
+    registeredUser.id,
+    config.jwtSecret,
+  );
 
   await sendEmailVerificationLink(registeredUser.email);
 
   res.status(201).json({
     message: "User Registration Succesfull",
-    access_token: session.accessToken,
-    refresh_token: session.refreshToken,
+    access_token: session.access_token,
+    refresh_token: session.refresh_token,
   });
 
   next();
@@ -43,21 +45,24 @@ export async function registerNewUser(
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
 
-  const existingUser = await User.findExistingUser(null, email);
-  if (!existingUser) {
+  const existing_user = await User.find_existing_user(null, email);
+  if (!existing_user) {
     return res.status(404).send("User does not exists! Please Signup");
   }
 
-  const hashedPassword = hashPassword(password);
-  if (existingUser.password !== hashedPassword) {
+  const hashed_password = hashPassword(password);
+  if (existing_user.password !== hashed_password) {
     return res.status(404).send("Email or Passowrd is Incorrect");
   }
 
-  const session = await Token.createNewSession(existingUser.id, jwtSecretKey);
+  const session = await Token.create_new_session(
+    existing_user.id,
+    config.jwtSecret,
+  );
 
   return res.status(201).json({
     message: "Login Succesfull",
-    access_token: session.accessToken,
-    refresh_token: session.refreshToken,
+    access_token: session.access_token,
+    refresh_token: session.refresh_token,
   });
 }

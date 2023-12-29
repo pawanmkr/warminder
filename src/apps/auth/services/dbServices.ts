@@ -1,171 +1,281 @@
-import {
-  deactivated,
-  emailVerificationAndPasswordResetRequests,
-  session,
-  users,
-} from "../schema.js";
-import db from "../../../config/postgres.js";
-import { eq } from "drizzle-orm";
-//import { UserUpdate } from "../../../shared/types.js";
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
+
+/**
+ * User-related database operations
+ */
 export class User {
-  static async findExistingUser(userId?: number | null, email?: string | null) {
-    let user: any[] = [];
-
-    if (userId) {
-      user = await db.select().from(users).where(eq(users.id, userId));
+  /**
+   * Finds an existing user by ID or email.
+   *
+   * @param user_id - The ID of the user to find (optional).
+   * @param email - The email address of the user to find (optional).
+   * @returns The found user object, or null if not found.
+   */
+  static async find_existing_user(
+    user_id?: number | null,
+    email?: string | null,
+  ) {
+    if (user_id) {
+      return prisma.users.findUnique({
+        where: { id: user_id },
+      });
     } else if (email) {
-      user = await db.select().from(users).where(eq(users.email, email));
+      return prisma.users.findUnique({
+        where: { email: email },
+      });
     }
 
-    return user[0];
+    return null;
   }
 
-  static async registerNewUser(
+  /**
+   * Registers a new user in the database.
+   *
+   * @param name - The name of the user.
+   * @param email - The email address of the user.
+   * @param country_code - The country code of the user.
+   * @param phone_number - The phone number of the user.
+   * @param password - The password of the user (hashed before storing).
+   * @returns The created user object.
+   */
+  static async register_new_user(
     name: string,
     email: string,
     country_code: number,
-    phone: string,
+    phone_number: string,
     password: string,
   ) {
-    const res = await db
-      .insert(users)
-      .values({
-        name: name,
-        email: email,
-        country_code: country_code,
-        phone: phone,
-        password: password,
-      })
-      .returning();
-
-    return res[0];
+    return prisma.users.create({
+      data: {
+        name,
+        email,
+        country_code,
+        phone_number,
+        password, // ensure password is hashed before storing
+      },
+    });
   }
 
-  static async updatePassword(userId: number, newPassword: string) {
-    return await db
-      .update(users)
-      .set({ password: newPassword })
-      .where(eq(users.id, userId));
+  /**
+   * Updates the password of an existing user.
+   *
+   * @param user_id - The ID of the user to update.
+   * @param new_password - The new password for the user (hashed before updating).
+   * @returns Empty object representing successful update.
+   */
+  static async update_password(user_id: number, new_password: string) {
+    return prisma.users.update({
+      where: { id: user_id },
+      data: { password: new_password }, // ensure password is hashed before updating
+    });
   }
 
-  static async updateEmailVerificationStatus(email: string) {
-    return await db
-      .update(users)
-      .set({ emailVerified: true })
-      .where(eq(users.email, email));
+  /**
+   * Marks an existing user's email as verified.
+   *
+   * @param email - The email address of the user to update.
+   * @returns Empty object representing successful update.
+   */
+  static async update_email_verification_status(email: string) {
+    return prisma.users.update({
+      where: { email: email },
+      data: { email_verified: true },
+    });
   }
 
-  static async getUserById(id: number) {
-    const res = await db
-      .select({
-        id: users.id,
-        name: users.id,
-        email: users.email,
-        country_code: users.country_code,
-        phone: users.phone,
-        emailVerified: users.emailVerified,
-      })
-      .from(users)
-      .where(eq(users.id, id));
-
-    return res[0];
+  /**
+   * Retrieves information about a user by their ID.
+   *
+   * @param id - The ID of the user to retrieve.
+   * @returns The user object with specified fields.
+   */
+  static async get_user_by_id(id: number) {
+    return prisma.users.findUnique({
+      where: { id: id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        country_code: true,
+        phone_number: true,
+        email_verified: true,
+      },
+    });
   }
 
-  static async updateUser(fields: any, id: number) {
-    return await db
-      .update(users)
-      .set(fields)
-      .where(eq(users.id, id))
-      .returning();
+  /**
+   * Updates specific fields of an existing user.
+   *
+   * @param fields - An object containing the fields to update and their values.
+   * @param id - The ID of the user to update.
+   * @returns The updated user object.
+   */
+  static async update_user(fields: any, id: number) {
+    return prisma.users.update({
+      where: { id: id },
+      data: fields,
+    });
   }
 
-  static async deactivateUser(userId: number) {
-    return await db
-      .insert(deactivated)
-      .values({ userId: userId })
-      .returning({ userId: deactivated.userId });
+  /**
+   * Deactivates a user by adding their ID to the "deactivated" table.
+   *
+   * @param user_id - The ID of the user to deactivate.
+   * @returns The newly created entry in the "deactivated" table.
+   */
+  static async deactivate_user(user_id: number) {
+    return prisma.deactivated.create({
+      data: { user_id: user_id },
+    });
   }
 
-  static async deleteUser(userId: number) {
-    return await db.delete(users).where(eq(users.id, userId));
+  /**
+   * Permanently deletes a user from the database.
+   *
+   * @param user_id - The ID of the user to delete.
+   * @returns Empty object representing successful deletion.
+   */
+  static async delete_user(user_id: number) {
+    await prisma.users.delete({
+      where: { id: user_id },
+    });
   }
 }
 
-// Session class
+/**
+ * Session-related database operations
+ */
 export class Session {
-  static async getSessionByUserId(id: number) {
-    return await db.select().from(session).where(eq(session.userId, id));
+  /**
+   * Retrieves a session by the associated user ID.
+   *
+   * @param user_id - The ID of the user to find the session for.
+   * @returns The found session object, or null if not found.
+   */
+  static async get_session_by_user_id(user_id: number) {
+    return prisma.session.findFirst({
+      where: { user_id: user_id },
+    });
   }
 
-  static async grantNewSession(token: string, expiry: bigint, userId: number) {
-    return await db
-      .insert(session)
-      .values({ token, expiry, userId })
-      .returning();
+  /**
+   * Creates a new session for a user.
+   *
+   * @param token - The session token.
+   * @param expiry - The expiry time of the session (bigint).
+   * @param user_id - The ID of the user associated with the session.
+   * @returns The newly created session object.
+   */
+  static async grant_new_session(
+    token: string,
+    expiry: bigint,
+    user_id: number,
+  ) {
+    return prisma.session.create({
+      data: { token, expiry, user_id },
+    });
   }
 }
 
-// Password class
+/**
+ * Password-related database operations
+ */
 export class Password {
-  static async registerResetRequest(
+  /**
+   * Registers a new password reset request.
+   *
+   * @param email - The email address of the user requesting a password reset.
+   * @param token - The unique token for the password reset request.
+   * @param expiry - The expiry time of the password reset request (bigint).
+   * @returns The created password reset request object.
+   */
+  static async register_reset_request(
     email: string,
     token: string,
     expiry: bigint,
   ) {
-    return await db
-      .insert(emailVerificationAndPasswordResetRequests)
-      .values({ email, token, expiry })
-      .returning();
+    return prisma.email_verification_and_password_reset_requests.create({
+      data: { email, token, expiry },
+    });
   }
 
-  static async findResetRequestByToken(resetToken: string) {
-    return await db
-      .select()
-      .from(emailVerificationAndPasswordResetRequests)
-      .where(eq(emailVerificationAndPasswordResetRequests.token, resetToken));
+  /**
+   * Finds a password reset request by its token.
+   *
+   * @param reset_token - The token of the password reset request to find.
+   * @returns The found password reset request object, or null if not found.
+   */
+  static async find_reset_request_by_token(reset_token: string) {
+    return prisma.email_verification_and_password_reset_requests.findUnique({
+      where: { token: reset_token },
+    });
   }
 
-  static async deleteResetRequest(email: string) {
-    return await db
-      .delete(emailVerificationAndPasswordResetRequests)
-      .where(eq(emailVerificationAndPasswordResetRequests.email, email))
-      .returning();
+  /**
+   * Deletes a password reset request by email.
+   *
+   * @param email - The email address associated with the password reset request to delete.
+   * @param reset_token - The Reset Token also
+   * @returns Empty object representing successful deletion.
+   */
+  static async delete_reset_request(email: string, reset_token: string) {
+    return prisma.email_verification_and_password_reset_requests.delete({
+      where: { email: email, token: reset_token },
+    });
   }
 }
 
-// EmailVerification class
+/**
+ * Email verification-related database operations
+ */
 export class EmailVerification {
-  static async saveEmailForVerification(
+  /**
+   * Saves an email for verification.
+   *
+   * @param email - The email address to be verified.
+   * @param token - The unique token for the verification process.
+   * @param expiry - The expiry time of the verification request (bigint).
+   * @returns The created verification request object.
+   */
+  static async save_email_for_verification(
     email: string,
     token: string,
     expiry: bigint,
   ) {
-    return await db
-      .insert(emailVerificationAndPasswordResetRequests)
-      .values({ email, token, expiry })
-      .returning();
+    return prisma.email_verification_and_password_reset_requests.create({
+      data: { email, token, expiry },
+    });
   }
 
-  static async findEmailVerificationRequestByToken(
-    emailVerificationToken: string,
+  /**
+   * Finds an email verification request by its token.
+   *
+   * @param email_verification_token - The token of the verification request to find.
+   * @returns The found verification request object, or null if not found.
+   */
+  static async find_email_verification_request_by_token(
+    email_verification_token: string,
   ) {
-    const res = await db
-      .select()
-      .from(emailVerificationAndPasswordResetRequests)
-      .where(
-        eq(
-          emailVerificationAndPasswordResetRequests.token,
-          emailVerificationToken,
-        ),
-      );
-
-    return res[0];
+    return prisma.email_verification_and_password_reset_requests.findUnique({
+      where: { token: email_verification_token },
+    });
   }
 
-  static async deleteEmailVerificationRequest(email: string) {
-    return await db
-      .delete(emailVerificationAndPasswordResetRequests)
-      .where(eq(emailVerificationAndPasswordResetRequests.email, email));
+  /**
+   * Deletes an email verification request by email.
+   *
+   * @param email - The email address associated with the verification request to delete.
+   * @param token - Token also
+   * @returns Empty object representing successful deletion.
+   */
+  static async delete_email_verification_requests(
+    email: string,
+    token: string,
+  ) {
+    return prisma.email_verification_and_password_reset_requests.delete({
+      where: { email: email, token: token },
+    });
   }
 }

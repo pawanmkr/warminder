@@ -1,0 +1,82 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["user", "company"]
+}
+
+model users {
+  id             Int           @id @default(autoincrement())
+  name           String
+  email          String        @unique()
+  email_verified Boolean       @default(false)
+  country_code   Int
+  phone_number   String        @db.VarChar(10)
+  password       String
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+  Session        session[]
+  deactivated    deactivated[]
+  emails         emails[]
+
+  @@schema("user")
+}
+
+model email_verification_and_password_reset_requests {
+  id         Int      @id @default(autoincrement())
+  email      String
+  token      String   @unique
+  expiry     BigInt
+  created_at DateTime @default(now())
+
+  @@schema("user")
+}
+
+model session {
+  id         Int      @id @default(autoincrement())
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    Int
+  token      String   @unique
+  expiry     BigInt
+  created_at DateTime @default(now())
+
+  @@schema("user")
+}
+
+model deactivated {
+  id         Int      @id @default(autoincrement())
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    Int
+  created_at DateTime @default(now())
+
+  @@schema("user")
+}
+
+model companies {
+  id         Int      @id @default(autoincrement())
+  name       String
+  location   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  emails     emails[]
+
+  @@schema("company")
+}
+
+model emails {
+  id         Int       @id @default(autoincrement())
+  email      String
+  upvote     Int       @default(0)
+  downvote   Int       @default(0)
+  created_at DateTime  @default(now())
+  user       users     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    Int
+  company    companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id Int
+
+  @@schema("company")
+}
