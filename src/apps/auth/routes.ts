@@ -15,8 +15,14 @@ import {
   deactivateUser,
 } from "./controllers/index.js";
 
+/**
+ * Creates an Express Router instance for handling authentication-related routes.
+ */
 export const authRouter = Router();
 
+/**
+ * Routes for user registration, login, and token management:
+ */
 authRouter
   .post("/register", InputValidation.validateUserRegistration, registerNewUser)
   .post("/login", InputValidation.validateUserLogin, login)
@@ -32,9 +38,12 @@ authRouter
     confirmPasswordReset,
   )
   .post("/email/verify/request", InputValidation.validateEmail, sendMagicLink)
-  .get("/email/verify/confirm", confirmEmailVerification)
+  .get("/email/verify/confirm", confirmEmailVerification);
 
-  // PROTECTED ROUTES
+/**
+ * Protected routes requiring a valid JWT token for authentication:
+ */
+authRouter
   .get("/user/:id", verifyJwtToken, getUser)
   .put(
     "/user/:id",

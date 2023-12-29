@@ -1,6 +1,5 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
-import { pgSchema } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 import pkg from "pg";
@@ -27,14 +26,13 @@ const pool = new Pool({
 const db = drizzle(pool);
 export default db;
 
-export const contributorSchema = pgSchema("contributor");
-export const jobSeekerSchema = pgSchema("job_seeker");
-
 export async function checkConnection() {
   try {
     await db.execute(sql`SELECT NOW()`);
     console.log("> Database connection Sucessfull!");
-    await migrate(db, { migrationsFolder: "drizzle" });
+    console.log("> Running Migrations...");
+    await migrate(db, { migrationsFolder: "./migrations" });
+    console.log("> Migrations Complete.\n");
   } catch (error) {
     console.error("> Database connection ", error);
   }

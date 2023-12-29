@@ -1,11 +1,12 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import "express-async-errors";
 
 import config from "../configs/config.js";
-import { authRouter } from "./apps/auth-service/index.js";
+import { authRouter } from "./apps/auth/index.js";
 import { checkConnection } from "./config/postgres.js";
+import { company_router } from "./apps/company/routes.js";
 
 const app = express();
 
@@ -26,7 +27,18 @@ app.use(
     exposedHeaders: ["Content-Range", "X-Content-Range"],
   }),
 );
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  // Log the error for debugging
+  console.error(err.stack);
+
+  // Send a generic error response to the client
+  res.status(500).json({ error: "Something went wrong" });
+  next();
+});
+
 app.use("/api/auth", authRouter);
+app.use("/api/company", company_router);
 
 // health check
 app.get("/api/health", (req: Request, res: Response) => {
