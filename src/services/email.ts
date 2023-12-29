@@ -9,9 +9,9 @@ const TOKEN_LENGTH = 32;
 export async function sendEmailVerificationLink(email: string) {
   const token = crypto.randomBytes(TOKEN_LENGTH).toString("hex");
 
-  const expiry = BigInt(Token.generateEpochTimestampInHours(24));
+  const expiry = BigInt(Token.generate_epoch_timestamp_in_hours(24));
 
-  await EmailVerification.saveEmailForVerification(email, token, expiry);
+  await EmailVerification.save_email_for_verification(email, token, expiry);
 
   const verificationLink = `${config.baseApiUrl}/auth/email/verify/confirm?token=${token}`;
 

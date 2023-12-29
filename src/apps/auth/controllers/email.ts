@@ -22,7 +22,7 @@ export async function confirmEmailVerification(req: Request, res: Response) {
   const token = req.query.token as string;
 
   const result =
-    await EmailVerification.findEmailVerificationRequestByToken(token);
+    await EmailVerification.find_email_verification_request_by_token(token);
   if (!result) return errorInResponse(res, 404, "Invalid Token");
 
   const now = new Date();
@@ -30,8 +30,11 @@ export async function confirmEmailVerification(req: Request, res: Response) {
     return errorInResponse(res, 400, "Verification Token Expired");
   }
 
-  await EmailVerification.deleteEmailVerificationRequest(result.email);
-  await User.updateEmailVerificationStatus(result.email);
+  await EmailVerification.delete_email_verification_requests(
+    result.email,
+    token,
+  );
+  await User.update_email_verification_status(result.email);
 
   res.json({
     message: "Email Verified Succesfully",

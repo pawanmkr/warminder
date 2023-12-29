@@ -14,14 +14,16 @@ export async function verifyAndRefreshToken(req: Request, res: Response) {
       });
     }
 
-    const session = await Session.getSessionByUserId(parseInt(user.user_id));
-    if (session[0].expiry <= Math.floor(Date.now() / 1000)) {
+    const session = await Session.get_session_by_user_id(
+      parseInt(user.user_id),
+    );
+    if (session && session.expiry <= Math.floor(Date.now() / 1000)) {
       return res.status(403).json({
         error: "Token Expired",
       });
     }
 
-    const accessToken = Token.generateAccessToken(
+    const accessToken = Token.generate_access_token(
       parseInt(user.user_id),
       config.jwtSecret,
     );

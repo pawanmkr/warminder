@@ -5,7 +5,6 @@ import "express-async-errors";
 
 import config from "../configs/config.js";
 import { authRouter } from "./apps/auth/index.js";
-import { checkConnection } from "./config/postgres.js";
 import { company_router } from "./apps/company/routes.js";
 
 const app = express();
@@ -48,5 +47,3 @@ app.get("/api/health", (req: Request, res: Response) => {
 app.listen(config.port, () => {
   console.log("> Server is listening on port:", config.port);
 });
-
-checkConnection();
