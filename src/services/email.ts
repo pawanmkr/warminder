@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import { EmailVerification } from "../apps/auth-service/services/dbServices.js";
-import { Token } from "../apps/auth-service/services/tokenAndSession.js";
+import { EmailVerification } from "../apps/auth/services/dbServices.js";
+import { Token } from "../apps/auth/services/tokenAndSession.js";
 import { sendMail, messageForEmailVerification } from "./nodemailer.js";
 import config from "../../configs/config.js";
 

@@ -15,7 +15,8 @@ export class InputValidation {
   static userRegistrationSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().trim().required(),
-    phone: Joi.string().length(10).optional(),
+    country_code: Joi.number(),
+    phone: Joi.string().length(10),
     password: Joi.string().min(6).required(),
   });
 
@@ -37,6 +38,7 @@ export class InputValidation {
   static userUpdateSchema = Joi.object({
     name: Joi.string().optional(),
     email: Joi.string().email().trim().optional(),
+    country_code: Joi.number().optional(),
     phone: Joi.string().optional().length(10),
     password: Joi.string().min(6).optional(),
   });

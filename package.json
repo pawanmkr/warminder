@@ -8,7 +8,7 @@
     "start": "node --watch dist/src/index.js",
     "lint": "eslint .",
     "prepare": "husky install",
-    "migration:generate": "drizzle-kit generate:pg --schema=./src/apps/auth-service/schema.ts",
+    "generate:migrations": "pnpm drizzle-kit generate:pg",
     "migration:push": ""
   },
   "author": "Pawan Kumar",

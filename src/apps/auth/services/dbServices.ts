@@ -24,20 +24,23 @@ export class User {
   static async registerNewUser(
     name: string,
     email: string,
+    country_code: number,
     phone: string,
     password: string,
   ) {
     const res = await db
       .insert(users)
-      .values({ name: name, email: email, phone: phone, password: password })
+      .values({
+        name: name,
+        email: email,
+        country_code: country_code,
+        phone: phone,
+        password: password,
+      })
       .returning();
 
     return res[0];
   }
-
-  /* static async updateCreator(id: number, created_by: number) {
-    await db.update(users).set({ created_by }).where(eq(users.id, id));
-  } */
 
   static async updatePassword(userId: number, newPassword: string) {
     return await db
@@ -59,6 +62,7 @@ export class User {
         id: users.id,
         name: users.id,
         email: users.email,
+        country_code: users.country_code,
         phone: users.phone,
         emailVerified: users.emailVerified,
       })
