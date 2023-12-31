@@ -7,10 +7,24 @@ export class Company {
    *
    * @param name - The name of the company.
    * @param location - The location of the company.
+   * @param size
+   * @param website
    */
-  static async save_company(name: string, location: string) {
+  static async save_company(name: string, location: string, size: number, website: string) {
     return await prisma.companies.create({
-      data: { name, location },
+      data: { name, location, size, website },
+    });
+  }
+
+  static async save_tag(company_id: number, tag_id: number) {
+    await prisma.company_tags.create({
+      data: { company_id: company_id, tag_id: tag_id }
+    });
+  }
+
+  static async get_tag(tag: string) {
+    return prisma.tags.findFirst({
+      where: { tag: tag }
     });
   }
 
@@ -20,10 +34,7 @@ export class Company {
         where: { email: email }
       });
 
-    if (res) {
-      return true;
-    } 
-    return false;
+    return !!res;
   }
 
   /**

@@ -62,7 +62,7 @@ model companies {
   id           Int            @id @default(autoincrement())
   name         String
   location     String
-  size         Int?
+  size         Int            @default(0)
   website      String         @default("")
   created_at   DateTime       @default(now())
   updated_at   DateTime       @updatedAt

@@ -13,7 +13,7 @@ company_router
   .post("/contribute", verify_jwt_token, add_company)
   .patch("/add/email/:company_id", verify_jwt_token, add_new_email);
 
-// clear discrepencies in company's data using this route 
+// clear discrepancies in company's data using this route
 
 
 // Internal Routes for various purposes like adding tags for companies
