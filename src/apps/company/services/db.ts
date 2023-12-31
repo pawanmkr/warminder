@@ -14,6 +14,18 @@ export class Company {
     });
   }
 
+  static async does_email_already_exists(email: string) {
+    const res = 
+      await prisma.emails.findFirst({
+        where: { email: email }
+      });
+
+    if (res) {
+      return true;
+    } 
+    return false;
+  }
+
   /**
    * Saves a new email associated with a company and user.
    *
@@ -34,7 +46,7 @@ export class Company {
    */
   static async get_all_the_companies() {
     return prisma.companies.findMany({
-      select: { name: true, location: true },
+      select: { id: true, name: true, location: true },
       take: 25, // Limit to 25 results
     });
   }

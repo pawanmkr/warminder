@@ -1,15 +1,11 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import config from "../../../../configs/config.js";
-import { ExtendedRequest } from "../../../shared/types.js";
+import config from "../../configs/config.js";
+import { ExtendedRequest } from "../shared/types.js";
 
-export default async function verifyJwtToken(
-  req: ExtendedRequest,
-  res: Response,
-  next: NextFunction,
-) {
-  const authHeader: string = req.headers.authorization || "";
-  const token: string = (authHeader && authHeader.split(" ")[1]) || "";
+export default async function verify_jwt_token(req: ExtendedRequest,res: Response,next: NextFunction) {
+  const auth_header: string = req.headers.authorization || "";
+  const token: string = (auth_header && auth_header.split(" ")[1]) || "";
 
   if (token) {
     jwt.verify(

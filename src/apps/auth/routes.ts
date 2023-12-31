@@ -1,5 +1,5 @@
 import { Router } from "express";
-import verifyJwtToken from "./middlewares/tokenVerification.js";
+import verify_jwt_token from "../../middlewares/jwt_middleware.js";
 import { InputValidation } from "./middlewares/validation.js";
 import {
   register_new_user,
@@ -48,12 +48,12 @@ authRouter
  * Protected routes requiring a valid JWT token for authentication:
  */
 authRouter
-  .get("/user/:id", verifyJwtToken, get_user)
+  .get("/user/:id", verify_jwt_token, get_user)
   .put(
     "/user/:id",
     InputValidation.validateUserUpdate,
-    verifyJwtToken,
+    verify_jwt_token,
     update_user,
   )
-  .get("/user/deactivate/:id", verifyJwtToken, deactivate_user)
-  .delete("/user/:id", verifyJwtToken, delete_user);
+  .get("/user/deactivate/:id", verify_jwt_token, deactivate_user)
+  .delete("/user/:id", verify_jwt_token, delete_user);
