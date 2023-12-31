@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Token, hashPassword } from "../utils/index.js";
-import { sendEmailVerificationLink } from "../../../services/email.js";
+import { sendEmailVerificationLink } from "../../../services/email/email.js";
 import { User } from "../services/dbServices.js";
 import config from "../../../../configs/config.js";
 

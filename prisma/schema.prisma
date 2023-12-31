@@ -56,14 +56,20 @@ model deactivated {
   @@schema("user")
 }
 
-model companies {
-  id         Int      @id @default(autoincrement())
-  name       String
-  location   String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  emails     emails[]
+// Another Schema
 
+model companies {
+  id           Int            @id @default(autoincrement())
+  name         String
+  location     String
+  size         Int?
+  website      String         @default("")
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  emails       emails[]
+  company_tags company_tags[]
+
+  @@unique([name, location])
   @@schema("company")
 }
 
@@ -78,5 +84,24 @@ model emails {
   company    companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
   company_id Int
 
+  @@unique([email, company_id])
+  @@schema("company")
+}
+
+model tags {
+  id           Int            @id @default(autoincrement())
+  tag          String         @unique
+  company_tags company_tags[]
+
+  @@schema("company")
+}
+
+model company_tags {
+  company    companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id Int
+  tag        tags      @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  tag_id     Int
+
+  @@id([company_id, tag_id])
   @@schema("company")
 }

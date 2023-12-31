@@ -1,8 +1,8 @@
 import crypto from "crypto";
-import { EmailVerification } from "../apps/auth/services/dbServices.js";
-import { Token } from "../apps/auth/services/tokenAndSession.js";
-import { sendMail, messageForEmailVerification } from "./nodemailer.js";
-import config from "../../configs/config.js";
+import { EmailVerification } from "../../apps/auth/services/dbServices.js";
+import { Token } from "../../apps/auth/services/tokenAndSession.js";
+import { sendMail, messageForEmailVerification } from "../nodemailer.js";
+import config from "../../../configs/config.js";
 
 const TOKEN_LENGTH = 32;
 

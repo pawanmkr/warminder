@@ -1,4 +1,4 @@
-import { sendEmailVerificationLink } from "../../../services/email.js";
+import { sendEmailVerificationLink } from "../../../services/email/email.js";
 import { Request, Response } from "express";
 import { errorInResponse } from "../utils/index.js";
 import { EmailVerification, User } from "../services/dbServices.js";
