@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import cors from "cors";
-import "express-async-errors";
 
 import config from "../configs/config.js";
 import { authRouter } from "./apps/auth/index.js";
@@ -11,29 +10,29 @@ const app = express();
 
 // Middlewares
 app.use((req: Request, res: Response, next) => {
-  if (req.method === "POST" || req.method === "PUT" || req.method === "PATCH") {
-    app.use(express.urlencoded({ extended: true }));
-  }
-  next();
+    if (req.method === "POST" || req.method === "PUT" || req.method === "PATCH") {
+        app.use(express.urlencoded({ extended: true }));
+    }
+    next();
 });
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(
-  cors({
-    origin: "*",
-    optionsSuccessStatus: 200,
-    allowedHeaders: ["Content-Type", "Authorization"],
-    exposedHeaders: ["Content-Range", "X-Content-Range"],
-  }),
+    cors({
+        origin: "*",
+        optionsSuccessStatus: 200,
+        allowedHeaders: ["Content-Type", "Authorization"],
+        exposedHeaders: ["Content-Range", "X-Content-Range"],
+    }),
 );
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  // Log the error for debugging
-  console.error(err.stack);
+    // Log the error for debugging
+    console.error(err.stack);
 
-  // Send a generic error response to the client
-  res.status(500).json({ error: "Something went wrong" });
-  next();
+    // Send a generic error response to the client
+    res.status(500).json({ error: "Something went wrong" });
+    next();
 });
 
 app.use("/api/auth", authRouter);
@@ -41,9 +40,9 @@ app.use("/api/company", company_router);
 
 // health check
 app.get("/api/health", (req: Request, res: Response) => {
-  res.send("OK");
+    res.send("OK");
 });
 
 app.listen(config.port, () => {
-  console.log("> Server is listening on port:", config.port);
+    console.log("> Server is listening on port:", config.port);
 });

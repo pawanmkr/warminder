@@ -1,18 +1,14 @@
 import { Router } from "express";
 import verify_jwt_token from "../../middlewares/jwt_middleware.js";
+import {get_google_oauth_url} from "../../services/google.js";
+import {handle_google_callback} from "./controllers/handle_google_auth.js";
 import { InputValidation } from "./middlewares/validation.js";
 import {
-  register_new_user,
-  login,
-  generate_password_reset_token,
-  verifyAndRefreshToken,
-  confirm_password_reset,
-  sendMagicLink,
-  confirmEmailVerification,
-  get_user,
-  update_user,
-  delete_user,
-  deactivate_user,
+    verifyAndRefreshToken,
+    get_user,
+    update_user,
+    delete_user,
+    deactivate_user,
 } from "./controllers/index.js";
 
 /**
@@ -23,37 +19,21 @@ export const authRouter = Router();
 /**
  * Routes for user registration, login, and token management:
  */
-authRouter
-  .post(
-    "/register",
-    InputValidation.validateUserRegistration,
-    register_new_user,
-  )
-  .post("/login", InputValidation.validateUserLogin, login)
-  .post("/token/refresh", verifyAndRefreshToken)
-  .post(
-    "/password/reset/request",
-    InputValidation.validateEmail,
-    generate_password_reset_token,
-  )
-  .post(
-    "/password/reset/confirm",
-    InputValidation.validatePassword,
-    confirm_password_reset,
-  )
-  .post("/email/verify/request", InputValidation.validateEmail, sendMagicLink)
-  .get("/email/verify/confirm", confirmEmailVerification);
+authRouter.post("/token/refresh", verifyAndRefreshToken);
 
 /**
  * Protected routes requiring a valid JWT token for authentication:
  */
 authRouter
-  .get("/user/:id", verify_jwt_token, get_user)
-  .put(
-    "/user/:id",
-    InputValidation.validateUserUpdate,
-    verify_jwt_token,
-    update_user,
-  )
-  .get("/user/deactivate/:id", verify_jwt_token, deactivate_user)
-  .delete("/user/:id", verify_jwt_token, delete_user);
+    .get("/user/:id", verify_jwt_token, get_user)
+    .put("/user/:id", InputValidation.validateUserUpdate, verify_jwt_token, update_user,)
+    .get("/user/deactivate/:id", verify_jwt_token, deactivate_user)
+    .delete("/user/:id", verify_jwt_token, delete_user);
+
+// Google Auth
+authRouter
+    .get("/sign-in/google", (req, res) => {
+        const authorizationUrl = get_google_oauth_url();res.redirect(authorizationUrl);
+    })
+    .get("/google/callback", handle_google_callback);
+
