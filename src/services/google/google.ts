@@ -1,4 +1,4 @@
-import config from "../../configs/config.js";
+import config from "../../../configs/config.js";
 import axios from "axios";
 
 export async function get_refresh_token(authorization_code: string) {
@@ -32,6 +32,7 @@ export function get_google_oauth_url() {
         scope: [
             "https://www.googleapis.com/auth/userinfo.profile",
             "https://www.googleapis.com/auth/userinfo.email",
+            "https://mail.google.com/"
         ].join(" "),
     };
 

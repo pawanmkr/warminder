@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {get_google_user_profile, get_refresh_token} from "../../../services/google.js";
+import {get_google_user_profile, get_refresh_token} from "../../../services/google/google.js";
 import { User } from "../services/dbServices.js";
 
 export async function handle_google_callback(req: Request, res: Response) {

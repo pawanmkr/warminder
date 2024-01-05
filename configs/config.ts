@@ -33,7 +33,14 @@ const config = {
     google: {
         client_id: process.env.GOOGLE_CLIENT_ID || "",
         client_secret: process.env.GOOGLE_CLIENT_SECRET || "",
-        redirect_uri: process.env.GOOGLE_REDIRECT_URI || "http://localhost:10000/api/auth/google/callback"
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI || "http://localhost:10000/api/auth/google/callback",
+
+        gmail: {
+            smtp: {
+                host: process.env.GMAIL_SMTP_HOST || "smtp.gmail.com",
+                port: process.env.GMAIL_SMTP_PORT || 465
+            }
+        }
     }
 };
 

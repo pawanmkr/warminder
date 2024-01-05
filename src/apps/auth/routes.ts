@@ -1,6 +1,6 @@
 import { Router } from "express";
 import verify_jwt_token from "../../middlewares/jwt_middleware.js";
-import {get_google_oauth_url} from "../../services/google.js";
+import {get_google_oauth_url} from "../../services/google/google.js";
 import {handle_google_callback} from "./controllers/handle_google_auth.js";
 import { InputValidation } from "./middlewares/validation.js";
 import {
@@ -10,6 +10,7 @@ import {
     delete_user,
     deactivate_user,
 } from "./controllers/index.js";
+import {send_cold_mail} from "../../controllers/mail.js";
 
 /**
  * Creates an Express Router instance for handling authentication-related routes.
@@ -37,3 +38,7 @@ authRouter
     })
     .get("/google/callback", handle_google_callback);
 
+
+export const mail_router = Router();
+
+mail_router.post("/send", send_cold_mail);

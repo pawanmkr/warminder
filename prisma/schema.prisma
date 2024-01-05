@@ -53,7 +53,7 @@ model federated_credentials {
   provider      String
   access_token  String @unique
   refresh_token String @unique
-  user          users  @relation(fields: [user_id], references: [id])
+  user          users  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id       Int
 
   @@schema("user")

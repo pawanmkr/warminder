@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import {Google_User_Profile} from "../../../../types/google.js";
+import {User_With_Federated_Credentials} from "../../../../types/user.js";
 
 const prisma = new PrismaClient();
 
@@ -82,15 +83,18 @@ export class User {
    */
     static async get_user_by_id(id: number) {
         return prisma.users.findUnique({
-            where: { id: id },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                country_code: true,
-                phone_number: true,
-            },
+            where: { id }
         });
+    }
+
+    static async get_user_with_federated_credentials(id: number) {
+        const res: User_With_Federated_Credentials[] = await prisma.$queryRawUnsafe(
+            `SELECT *
+                        FROM "user".users
+                        JOIN "user".federated_credentials ON users.id = federated_credentials.user_id
+                   WHERE "user".users.id = ${id};`
+        );
+        return res[0];
     }
 
     /**
