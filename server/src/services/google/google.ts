@@ -15,7 +15,7 @@ export async function get_refresh_token(authorization_code: string) {
 
         return response.data;
     } catch (error) {
-        console.error("Error getting refresh token:", error);
+        console.error(error);
         return null;
     }
 }

@@ -69,10 +69,14 @@ export class User {
         };
     }
 
-    static async find_existing_federated_credentials(id: string, provider: string) {
-        return await prisma.federated_credentials.findUnique({
-            where: { id, provider }
-        });
+    static async find_existing_federated_credentials_with_user_details(id: string, provider: string) {
+        const res: User_With_Federated_Credentials[] = await prisma.$queryRawUnsafe(
+            `SELECT users.id
+                        FROM "user".users
+                        JOIN "user".federated_credentials ON users.id = federated_credentials.user_id
+                    WHERE "user".federated_credentials.id = '${id}';`
+        );
+        return res[0];
     }
 
     /**

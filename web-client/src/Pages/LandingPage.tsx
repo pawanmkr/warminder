@@ -1,14 +1,17 @@
 import SignIn from "../Components/SignIn";
 import Something from "../Components/Something";
 import "./style.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const LandingPage = () => {
     return (
-        <div className="landing-page">
-            <Something />
-            <br />
-            <SignIn />
-        </div>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <div className="landing-page">
+                <Something />
+                <br />
+                <SignIn />
+            </div>
+        </GoogleOAuthProvider>
     );
 }
 

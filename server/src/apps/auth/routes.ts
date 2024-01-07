@@ -1,7 +1,7 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import verify_jwt_token from "../../middlewares/jwt_middleware.js";
-import {get_google_oauth_url} from "../../services/google/google.js";
-import {handle_google_callback} from "./controllers/handle_google_auth.js";
+// import { get_google_oauth_url } from "../../services/google/google.js";
+import { handle_google_oauth } from "./controllers/handle_google_auth.js";
 import { InputValidation } from "./middlewares/validation.js";
 import {
     verifyAndRefreshToken,
@@ -10,34 +10,24 @@ import {
     delete_user,
     deactivate_user,
 } from "./controllers/index.js";
-import {send_cold_mail} from "../../controllers/mail.js";
+import { send_cold_mail } from "../../controllers/mail.js";
 
-/**
- * Creates an Express Router instance for handling authentication-related routes.
- */
 export const authRouter = Router();
 
-/**
- * Routes for user registration, login, and token management:
- */
+authRouter.get("/health", async (req: Request, res: Response) => {
+    res.send("OK");
+});
+
 authRouter.post("/token/refresh", verifyAndRefreshToken);
 
-/**
- * Protected routes requiring a valid JWT token for authentication:
- */
 authRouter
     .get("/user/:id", verify_jwt_token, get_user)
     .put("/user/:id", InputValidation.validateUserUpdate, verify_jwt_token, update_user,)
     .get("/user/deactivate/:id", verify_jwt_token, deactivate_user)
     .delete("/user/:id", verify_jwt_token, delete_user);
 
-// Google Auth
 authRouter
-    .get("/sign-in/google", (req, res) => {
-        const authorizationUrl = get_google_oauth_url();res.redirect(authorizationUrl);
-    })
-    .get("/google/callback", handle_google_callback);
-
+    .post("/sign-in/google", handle_google_oauth);
 
 export const mail_router = Router();
 
