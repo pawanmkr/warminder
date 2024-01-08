@@ -21,7 +21,7 @@ authRouter.get("/health", async (req: Request, res: Response) => {
 authRouter.post("/token/refresh", verifyAndRefreshToken);
 
 authRouter
-    .get("/user/:id", verify_jwt_token, get_user)
+    .get("/user", verify_jwt_token, get_user)
     .put("/user/:id", InputValidation.validateUserUpdate, verify_jwt_token, update_user,)
     .get("/user/deactivate/:id", verify_jwt_token, deactivate_user)
     .delete("/user/:id", verify_jwt_token, delete_user);

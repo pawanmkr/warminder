@@ -10,4 +10,76 @@
 .sign-in-btn p {
   font-size: 0.7em;
   margin: 0 0 0 10px;
+}
+
+.sidebar {
+  background-color: rgb(232, 232, 232);
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 20px 20px;
+  overflow: hidden;
+}
+.sidebar .profile {
+  margin-bottom: 20px;
+  padding-left: 15px;
+}
+.sidebar .profile img {
+  border-radius: 5%;
+}
+.sidebar .profile .info .name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0;
+}
+.sidebar .profile .info .credits {
+  margin: 0;
+}
+.sidebar .menus {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.sidebar .menus .menu-option {
+  margin: 0;
+  border-radius: 25px;
+  padding: 5px 15px;
+  margin: 0 0 10px 0;
+  cursor: pointer;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.sidebar .menus .menu-option:hover {
+  background-color: rgb(198, 198, 198);
+}
+
+.dashboard-stats {
+  width: 85%;
+  padding: 0 50px;
+  overflow: hidden;
+}
+.dashboard-stats .campaign .title, .dashboard-stats .contribution .title {
+  font-size: 1.7em;
+  font-weight: bold;
+}
+.dashboard-stats .campaign .data, .dashboard-stats .contribution .data {
+  display: flex;
+}
+.dashboard-stats .campaign .data .numbers, .dashboard-stats .contribution .data .numbers {
+  background-color: rgb(217, 216, 216);
+  padding: 10px;
+  border-radius: 5px;
+  margin-right: 25px;
+  width: 120px;
+}
+.dashboard-stats .campaign .data .numbers label, .dashboard-stats .contribution .data .numbers label {
+  font-size: 1.2em;
+}
+.dashboard-stats .campaign .data .numbers p, .dashboard-stats .contribution .data .numbers p {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 10px 0;
 }/*# sourceMappingURL=style.css.map */

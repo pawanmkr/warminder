@@ -13,7 +13,7 @@ const SignIn = () => {
                     `${import.meta.env.VITE_SERVER}/auth/sign-in/google`, {
                     code: codeResponse.code,
                 });
-            
+
             localStorage.setItem("jwt", res.data)
         },
         onError: errorResponse => console.log(errorResponse),

@@ -6,10 +6,101 @@
     justify-content: center;
     padding: 10px;
 
-
     p {
         font-size: .7em;
         margin: 0 0 0 10px;
     }
 
+}
+
+.sidebar {
+    background-color: rgb(232, 232, 232);
+    width: 15%;
+
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 20px 20px;
+    overflow: hidden;
+
+    .profile {
+        margin-bottom: 20px;
+        padding-left: 15px;
+
+        img {
+            border-radius: 5%;
+        }
+
+        .info {
+            .name {
+                font-size: 1.2em;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            .credits {
+                margin: 0;
+            }
+        }
+    }
+
+    .menus {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        font-size: 1.5em;
+        font-weight: bold;
+
+        .last-option {
+            
+        }
+
+        .menu-option {
+            margin: 0;
+            border-radius: 25px;
+            padding: 5px 15px;
+            margin: 0 0 10px 0;
+            cursor: pointer;
+            width: fit-content;
+        }
+        .menu-option:hover {
+            background-color: rgb(198, 198, 198);
+
+        }
+    }
+}
+
+.dashboard-stats {
+    width: 85%;
+    padding: 0 50px;
+    overflow: hidden;
+
+    .campaign, .contribution {
+        .title {
+            font-size: 1.7em;
+            font-weight: bold;
+        }
+
+        .data {
+            display: flex;
+
+            .numbers {
+                background-color: rgb(217, 216, 216);
+                padding: 10px;
+                border-radius: 5px;
+                margin-right: 25px;
+                width: 120px;
+
+                label {
+                    font-size: 1.2em;
+                }
+
+                p {
+                    font-size: 2.5em;
+                    font-weight: bold;
+                    margin: 10px 0;
+                }
+            }
+        }
+    }
 }

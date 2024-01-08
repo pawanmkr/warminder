@@ -1,6 +1,6 @@
 import SignIn from "../Components/SignIn";
 import Something from "../Components/Something";
-import "./style.css";
+import "./styles/style.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const LandingPage = () => {

@@ -3,23 +3,18 @@ import { User } from "../services/dbServices.js";
 import { ExtendedRequest } from "../../../shared/types.js";
 
 export async function get_user(req: ExtendedRequest, res: Response) {
-    const user_id = parseInt(req.params.id);
+    if (!req.user) {
+        return res.status(500).send("Something Went Wrong.");
+    }
 
-    const user = await User.get_user_by_id(user_id);
+    const user = await User.get_user_by_id(req.user.user_id);
     if (!user) {
         return res.status(404).send("User does not exists");
     }
 
-    if (req.user && req.user.user_id != user.id) {
-        return res.status(404).send("Invalid Credentials");
-    }
-
     return res.status(200).json({
-        id: user.id,
         name: user.name,
-        email: user.email,
-        country_code: user.country_code,
-        phone_number: user.phone_number,
+        picture: user.picture
     });
 }
 
