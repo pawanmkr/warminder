@@ -29,10 +29,10 @@ export class Company {
     }
 
     static async does_email_already_exists(email: string) {
-        const res = 
-      await prisma.emails.findFirst({
-          where: { email: email }
-      });
+        const res =
+            await prisma.emails.findFirst({
+                where: { email: email }
+            });
 
         return !!res;
     }
@@ -57,7 +57,13 @@ export class Company {
    */
     static async get_all_the_companies() {
         return prisma.companies.findMany({
-            select: { id: true, name: true, location: true },
+            select: {
+                id: true,
+                name: true,
+                location: true,
+                website: true,
+                size: true
+            },
             take: 25, // Limit to 25 results
         });
     }

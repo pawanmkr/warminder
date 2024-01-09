@@ -1,15 +1,26 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { RotatingLines } from "react-loader-spinner";
 import "./styles/style.css";
+import { Components } from "../Pages/Dashboard";
 
 type User = {
     name: string,
     picture: string
 }
 
-const Sidebar = () => {
+interface SidebarProps {
+    components: Components
+    setCurrent: React.Dispatch<React.SetStateAction<ReactNode>>
+}
+
+const Sidebar = ({ components, setCurrent }: SidebarProps) => {
     const [profile, setProfile] = useState<User>();
+
+    function handleTabChange(e: React.MouseEvent<HTMLButtonElement>) {
+        const id = (e.target as HTMLElement).id;
+        setCurrent(components[id]);
+    }
 
     useEffect(() => {
         async function fetchProfile() {
@@ -42,15 +53,19 @@ const Sidebar = () => {
             ) : (
                 <RotatingLines />
             )}
+
+            <hr />
+
             <div className="menus">
                 <div className="up">
-                    <p className="dashboard menu-option">Dashboard</p>
-                    <p className="Companies menu-option">Companies</p>
-                    <p className="send-mails menu-option">Send Mails</p>
-                    <p className="my-list menu-option">My Lists</p>
+                    <button id="stats" onClick={handleTabChange} className="dashboard menu-option">Dashboard</button>
+                    <button id="companies" onClick={handleTabChange} className="Companies menu-option">Companies</button>
+                    <button id="contribution-form" onClick={handleTabChange} className="contribute menu-option">Contribute</button>
+                    <button onClick={handleTabChange} className="send-mails menu-option">Send Mails</button>
+                    <button onClick={handleTabChange} className="my-list menu-option">My Lists</button>
                 </div>
                 <div className="bottom">
-                    <p className="settings menu-option last-option">Settings</p>
+                    <button onClick={handleTabChange} className="settings menu-option last-option">Settings</button>
                 </div>
             </div>
         </div >

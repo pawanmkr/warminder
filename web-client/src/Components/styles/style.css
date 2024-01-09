@@ -14,15 +14,15 @@
 
 .sidebar {
   background-color: rgb(232, 232, 232);
-  width: 15%;
+  width: 20%;
   display: flex;
   flex-direction: column;
-  padding: 20px 20px 20px 20px;
   overflow: hidden;
 }
 .sidebar .profile {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding-left: 15px;
+  padding: 20px 20px 0 35px;
 }
 .sidebar .profile img {
   border-radius: 5%;
@@ -35,6 +35,12 @@
 .sidebar .profile .info .credits {
   margin: 0;
 }
+.sidebar hr {
+  border: none;
+  height: 1px;
+  background-color: gray;
+  width: 100%;
+}
 .sidebar .menus {
   display: flex;
   flex-direction: column;
@@ -42,18 +48,23 @@
   height: 100%;
   font-size: 1.5em;
   font-weight: bold;
+  padding: 10px 20px 10px 20px;
 }
 .sidebar .menus .menu-option {
   margin: 0;
+  border: none;
   border-radius: 25px;
-  padding: 5px 15px;
+  padding: 10px 15px;
   margin: 0 0 10px 0;
+  font-size: 1em;
   cursor: pointer;
   width: -moz-fit-content;
   width: fit-content;
+  font-weight: bold;
+  background-color: rgb(232, 232, 232);
 }
 .sidebar .menus .menu-option:hover {
-  background-color: rgb(198, 198, 198);
+  background-color: #ffc229;
 }
 
 .dashboard-stats {
@@ -64,6 +75,7 @@
 .dashboard-stats .campaign .title, .dashboard-stats .contribution .title {
   font-size: 1.7em;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 .dashboard-stats .campaign .data, .dashboard-stats .contribution .data {
   display: flex;
@@ -82,4 +94,165 @@
   font-size: 2.5em;
   font-weight: bold;
   margin: 10px 0;
+}
+
+.companies {
+  padding: 25px 50px 0 50px;
+  width: 100%;
+  overflow-y: scroll;
+}
+.companies hr {
+  margin: 25px 0 0 0;
+  border: none;
+  height: 1px;
+  background-color: rgb(232, 232, 232);
+}
+.companies .up {
+  display: flex;
+  justify-content: space-between;
+}
+.companies .up .contribute-btn {
+  border: none;
+  padding: 10px;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  background-color: black;
+  color: whitesmoke;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.companies .up .contribute-btn span {
+  margin-left: 5px;
+}
+.companies .up .contribute-btn:hover {
+  background-color: #ffc229;
+  color: black;
+  border: none;
+}
+.companies .list {
+  margin-top: 25px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+}
+.companies .list .company {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  padding: 20px;
+  background-color: rgb(232, 232, 232);
+  border-radius: 5px;
+  margin: 0 0 25px 0;
+}
+.companies .list .company .identity {
+  display: flex;
+  align-items: center;
+}
+.companies .list .company .identity img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.companies .list .company .identity .details {
+  margin-left: 15px;
+}
+.companies .list .company .identity .details .up {
+  display: flex;
+  align-items: center;
+}
+.companies .list .company .identity .details .up .name {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 0 25px 0 0;
+}
+.companies .list .company .identity .details .up .location-size {
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+}
+.companies .list .company .identity .details .up .location-size .location {
+  margin-right: 25px;
+}
+.companies .list .company .identity .details .up .location-size .location, .companies .list .company .identity .details .up .location-size .size {
+  display: flex;
+  align-items: center;
+}
+.companies .list .company .identity .details .up .location-size .location span, .companies .list .company .identity .details .up .location-size .size span {
+  margin-left: 5px;
+}
+.companies .list .company .identity .details a {
+  font-size: 14px;
+}
+.companies .list .details {
+  margin-top: 10px;
+}
+.companies .list .details .roles, .companies .list .details .skills {
+  width: 100%;
+}
+.companies .list .details .roles label, .companies .list .details .skills label {
+  font-weight: 500;
+}
+.companies .list .details .roles p, .companies .list .details .skills p {
+  font-size: small;
+  margin: 0;
+  margin-top: 5px;
+  font-weight: 500;
+}
+.companies .list .details .roles p span, .companies .list .details .skills p span {
+  display: inline-block;
+  background-color: #ffc229;
+  width: -moz-max-content;
+  width: max-content;
+  border-radius: 25px;
+  padding: 5px 15px;
+  margin: 0 10px 10px 0;
+}
+
+.search-box input {
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1.2em;
+  border: 1px solid black;
+  width: 345px;
+}
+
+.contribution-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 25px 50px 0 50px;
+}
+.contribution-form .heading {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0;
+}
+.contribution-form .inputs .input {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 20px 0;
+}
+.contribution-form .inputs .input input, .contribution-form .inputs .input select {
+  padding: 10px;
+  font-size: 1em;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid black;
+  width: 250px;
+}
+.contribution-form .inputs button {
+  padding: 10px;
+  font-size: 1.2em;
+  border-radius: 5px;
+  border: none;
+  width: 270px;
+  background-color: black;
+  color: whitesmoke;
+}
+.contribution-form .inputs button:hover {
+  background-color: #ffc229;
+  color: black;
+  border: none;
+  cursor: pointer;
 }/*# sourceMappingURL=style.css.map */
