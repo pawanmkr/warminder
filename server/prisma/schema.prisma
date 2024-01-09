@@ -80,15 +80,16 @@ model sessions {
 // Another Schema
 
 model companies {
-  id           Int            @id @default(autoincrement())
-  name         String
-  location     String
-  size         Int            @default(0)
-  website      String         @default("")
-  created_at   DateTime       @default(now())
-  updated_at   DateTime       @updatedAt
-  emails       emails[]
-  company_tags company_tags[]
+  id             Int              @id @default(autoincrement())
+  name           String
+  location       String
+  size           String           @default("1-10")
+  website        String           @default("")
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  emails         emails[]
+  company_skills company_skills[]
+  company_roles  company_roles[]
 
   @@unique([name, location])
   @@schema("company")
@@ -109,20 +110,38 @@ model emails {
   @@schema("company")
 }
 
-model tags {
-  id           Int            @id @default(autoincrement())
-  tag          String         @unique
-  company_tags company_tags[]
+model skills {
+  id             Int              @id @default(autoincrement())
+  skill          String           @unique
+  company_skills company_skills[]
 
   @@schema("company")
 }
 
-model company_tags {
+model company_skills {
   company    companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
   company_id Int
-  tag        tags      @relation(fields: [tag_id], references: [id], onDelete: Cascade)
-  tag_id     Int
+  skill      skills    @relation(fields: [skill_id], references: [id], onDelete: Cascade)
+  skill_id   Int
 
-  @@id([company_id, tag_id])
+  @@id([company_id, skill_id])
+  @@schema("company")
+}
+
+model roles {
+  id            Int             @id @default(autoincrement())
+  role          String          @unique
+  company_roles company_roles[]
+
+  @@schema("company")
+}
+
+model company_roles {
+  company    companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id Int
+  role       roles     @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  role_id    Int
+
+  @@id([company_id, role_id])
   @@schema("company")
 }

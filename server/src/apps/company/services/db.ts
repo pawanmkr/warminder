@@ -10,21 +10,57 @@ export class Company {
    * @param size
    * @param website
    */
-    static async save_company(name: string, location: string, size: number, website: string) {
+    static async save_company(name: string, location: string, size: string, website: string) {
         return await prisma.companies.create({
             data: { name, location, size, website },
         });
     }
 
-    static async save_tag(company_id: number, tag_id: number) {
-        await prisma.company_tags.create({
-            data: { company_id: company_id, tag_id: tag_id }
+    static async save_role(company_id: number, role: string) {
+        try {
+            let role_res;
+
+            role_res = await prisma.roles.findFirst({ where: { role } });
+            if (!role_res) {
+                role_res = await prisma.roles.create({ data: { role } });
+            }
+
+            await prisma.company_roles.create({
+                data: { company_id, role_id: role_res.id },
+            });
+        } catch (error) {
+            console.error("Error saving role:", error);
+            throw error; // Rethrow the error for further handling
+        }
+    }
+
+    static async save_skill(company_id: number, skill: string) {
+        try {
+            let skill_res;
+
+            skill_res = await prisma.skills.findFirst({ where: { skill } });
+            if (!skill_res) {
+                skill_res = await prisma.skills.create({ data: { skill } });
+            }
+
+            await prisma.company_skills.create({
+                data: { company_id, skill_id: skill_res.id },
+            });
+        } catch (error) {
+            console.error("Error saving skill:", error);
+            throw error; // Rethrow the error for further handling
+        }
+    }
+
+    static async get_role(role: string) {
+        return prisma.roles.findFirst({
+            where: { role }
         });
     }
 
-    static async get_tag(tag: string) {
-        return prisma.tags.findFirst({
-            where: { tag: tag }
+    static async get_skill(skill: string) {
+        return prisma.skills.findFirst({
+            where: { skill }
         });
     }
 

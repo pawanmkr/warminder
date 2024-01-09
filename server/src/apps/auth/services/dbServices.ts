@@ -74,7 +74,7 @@ export class User {
             `SELECT users.id
                         FROM "user".users
                         JOIN "user".federated_credentials ON users.id = federated_credentials.user_id
-                    WHERE "user".federated_credentials.id = '${id}';`
+                    WHERE "user".federated_credentials.id = '${id}' AND "user".federated_credentials.provider = '${provider}';`
         );
         return res[0];
     }

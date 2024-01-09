@@ -41,6 +41,10 @@ const config = {
                 port: process.env.GMAIL_SMTP_PORT || 465
             }
         }
+    },
+    ut: {
+        secret: process.env.UPLOADTHING_SECRET,
+        app_id: process.env.UPLOADTHING_APP_ID
     }
 };
 

@@ -14,7 +14,7 @@ import { verify_and_validate_email } from "../../services/email/verification.js"
  * @param res Response - The response object to send back to the client.
  */
 export async function add_company(req: ExtendedRequest, res: Response) {
-    const { name, location, email, size, website, tags } = req.body;
+    const { name, location, email, size, website, roles, skills } = req.body;
 
     // Validate user existence
     if (!req.user) {
@@ -61,18 +61,21 @@ export async function add_company(req: ExtendedRequest, res: Response) {
 
     await Company.save_email(email, company_id, user_id);
 
-    const saved_tags = [];
-    // Save Multiple Tags Asynchronously
-    for await (const tag of tags) {
-        try {
-            const res = await Company.get_tag(tag);
-            if (res !== null) {
-                const confirmation = await Company.save_tag(company_id, res.id);
-                saved_tags.push(confirmation);
-            }
-        } catch (e) {
-            console.error(e);
-        }
+    const roles_arr = roles.split(",").map((role: string) => role.trim());
+    const skills_arr = skills.split(",").map((skill: string) => skill.trim());
+
+    const saved_roles = [];
+    const saved_skills = [];
+
+    // Save Multiple Roles and Skills Asynchronously
+    for await (const role of roles_arr) {
+        const confirmation = await Company.save_role(company_id, role);
+        saved_roles.push(confirmation);
+    }
+
+    for await (const skill of skills_arr) {
+        const confirmation = await Company.save_skill(company_id, skill);
+        saved_skills.push(confirmation);
     }
 
     /*
@@ -81,7 +84,8 @@ export async function add_company(req: ExtendedRequest, res: Response) {
    * because there is an edge case where user can accidentally input the tag
    * which does not exits in the database and is made up by user which is not acceptable.
    */
-    req.body.tags = saved_tags;
+    req.body.roles = saved_roles;
+    req.body.skills = saved_skills;
 
     res.status(201).json({
         id: company_id,
@@ -103,7 +107,7 @@ export async function add_new_email(req: ExtendedRequest, res: Response) {
     }
 
     try {
-    // Update email whichever is requested
+        // Update email whichever is requested
         await Company.save_email(email, company_id, req.user.user_id);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError && error.code === "P2002") {
