@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export class Company {
@@ -10,9 +10,9 @@ export class Company {
    * @param size
    * @param website
    */
-    static async save_company(name: string, location: string, size: string, website: string) {
+    static async save_company(name: string, location: string, size: string, website: string, picture_url: string) {
         return await prisma.companies.create({
-            data: { name, location, size, website },
+            data: { name, location, size, website, picture: picture_url },
         });
     }
 
@@ -28,9 +28,14 @@ export class Company {
             await prisma.company_roles.create({
                 data: { company_id, role_id: role_res.id },
             });
-        } catch (error) {
-            console.error("Error saving role:", error);
-            throw error; // Rethrow the error for further handling
+        } catch (e) {
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === "P2002") {
+                    console.log("There is a unique constraint violation.");
+                }
+            } else {
+                throw e;
+            }
         }
     }
 
@@ -46,9 +51,14 @@ export class Company {
             await prisma.company_skills.create({
                 data: { company_id, skill_id: skill_res.id },
             });
-        } catch (error) {
-            console.error("Error saving skill:", error);
-            throw error; // Rethrow the error for further handling
+        } catch (e) {
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === "P2002") {
+                    console.log("There is a unique constraint violation.");
+                }
+            } else {
+                throw e;
+            }
         }
     }
 
@@ -92,15 +102,22 @@ export class Company {
    * @returns An array of company objects with limited fields.
    */
     static async get_all_the_companies() {
-        return prisma.companies.findMany({
-            select: {
-                id: true,
-                name: true,
-                location: true,
-                website: true,
-                size: true
-            },
-            take: 25, // Limit to 25 results
-        });
+        return prisma.$queryRawUnsafe(`
+            SELECT
+                c.id,
+                c.name,
+                c.picture,
+                c.size,
+                c.website,
+                c.location,
+                array_remove(array_agg(distinct (r.role)), NULL) AS roles,
+                array_remove(array_agg(distinct (s.skill)), NULL) AS skills
+            FROM company.companies c
+            LEFT JOIN company.company_roles cr ON c.id = cr.company_id
+            LEFT JOIN company.roles r ON cr.role_id = r.id
+            LEFT JOIN company.company_skills cs ON c.id = cs.company_id
+            LEFT JOIN company.skills s ON cs.skill_id = s.id
+            GROUP BY c.id;`
+        );
     }
 }

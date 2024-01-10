@@ -42,18 +42,19 @@ const Sidebar = ({ components, setCurrent }: SidebarProps) => {
 
     return (
         <div className="sidebar" >
-            {profile !== undefined ? (
-                <div className="profile">
-                    <img src={profile.picture} />
-                    <div className="info">
-                        <p className="name">{profile.name}</p>
-                        <p className="credits">Credits: 180</p>
-                    </div>
-                </div>
-            ) : (
-                <RotatingLines />
-            )}
-
+            <div className="profile">
+                {profile !== undefined ? (
+                    <>
+                        <img src={profile.picture} />
+                        <div className="info">
+                            <p className="name">{profile.name}</p>
+                            <p className="credits">Credits: 180</p>
+                        </div>
+                    </>
+                ) : (
+                    <RotatingLines />
+                )}
+            </div>
             <hr />
 
             <div className="menus">

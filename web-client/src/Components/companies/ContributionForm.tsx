@@ -1,26 +1,32 @@
-import axios, { formToJSON } from "axios";
+import axios from "axios";
+import { useState } from "react";
 
 const ContributionForm = () => {
+    const [size, setSize] = useState("251-500");
 
     async function handleSubmission(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        const form = new FormData(e.target as HTMLFormElement);
+        form.append("size", size);
 
-        const res =
-            await axios.post(`${import.meta.env.VITE_SERVER}/company/contribute`,
-                formToJSON(new FormData(e.target as HTMLFormElement)), {
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("jwt")}`
-                }
+
+        await axios.post(`${import.meta.env.VITE_SERVER}/company/contribute`,
+            form, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwt")}`
             }
-            );
-
-        if (res.status === 201) {
-            console.log("Submission Successfull!");
         }
+        );
+
+        window.alert("Submission Successfull!");
+    }
+
+    function handleOptionChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        setSize(e.target.value);
     }
 
     return (
-        <form className="contribution-form" onSubmit={handleSubmission}>
+        <form method="post" className="contribution-form" onSubmit={handleSubmission}>
             <p className="heading">Add a Company</p>
             <p className="instructions">
                 *Please fill the Correct Information only.
@@ -34,7 +40,7 @@ const ContributionForm = () => {
             <div className="inputs">
                 <div className="input">
                     <label>Company Logo</label>
-                    <input type="file" name="picture" />
+                    <input type="file" name="picture" accept="image/png, image/jpeg" />
                 </div>
                 <div className="input">
                     <label>Name</label>
@@ -45,8 +51,12 @@ const ContributionForm = () => {
                     <input type="text" required placeholder="Ex. New Delhi, India" name="location" />
                 </div>
                 <div className="input">
+                    <label>Email Address</label>
+                    <input type="email" name="email" />
+                </div>
+                <div className="input">
                     <label>No. of Employees</label>
-                    <select required defaultValue="11-50">
+                    <select required defaultValue={size} onChange={handleOptionChange} >
                         <option value="1-10">1-10</option>
                         <option value="11-50">11-50</option>
                         <option value="51-250">51-200</option>

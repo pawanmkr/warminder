@@ -45,6 +45,10 @@ const config = {
     ut: {
         secret: process.env.UPLOADTHING_SECRET,
         app_id: process.env.UPLOADTHING_APP_ID
+    },
+    azure: {
+        connection_string: process.env.ABS_CONNECTION_STRING,
+        container_name: process.env.ABS_CONTAINER_NAME
     }
 };
 

@@ -1,12 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import cors from "cors";
-import { createUploadthingExpressHandler } from "uploadthing/express";
+import * as fs from "fs";
+import path from "path";
 
 import config from "../configs/config.js";
 import { authRouter, mail_router } from "./apps/auth/index.js";
 import { company_router } from "./apps/company/routes.js";
-import { uploadRouter } from "./services/upload_thing.js";
 
 const app = express();
 
@@ -31,16 +31,19 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
-app.use(
-    "/api/uploadthing",
-    createUploadthingExpressHandler({
-        router: uploadRouter,
-    }),
-);
-
 app.use("/api/auth", authRouter);
 app.use("/api/company", company_router);
 app.use("/api/mail", mail_router);
+
+const dir = path.join(path.join(process.cwd()), "/uploads");
+if (!fs.existsSync(dir)) {
+    fs.mkdir(dir, (err) => {
+        if (err) {
+            console.error(err);
+            process.exit(0);
+        }
+    });
+}
 
 app.listen(config.port, () => {
     console.log("> Server is listening on port:", config.port);

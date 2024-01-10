@@ -12,6 +12,9 @@ export type CompanyData = {
     location: string
     size: string
     website: string
+    picture: string
+    skills: string[]
+    roles: string[]
 }
 
 const Companies = () => {
@@ -24,6 +27,7 @@ const Companies = () => {
                 const res = await axios
                     .get(`${import.meta.env.VITE_SERVER}/company/list`);
                 setCompanies(res.data);
+                console.log(res.data);
             } else {
                 throw new Error("Failed to fetch Companies.");
             }
@@ -50,10 +54,12 @@ const Companies = () => {
                     })}
                 </div>
             ) : (
-                <RotatingLines />
+                <div className="loading">
+                    <RotatingLines />
+                </div>
             )}
         </div>
     )
 }
 
-export default Companies
+export default Companies;

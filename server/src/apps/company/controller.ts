@@ -4,6 +4,7 @@ import { User } from "../auth/services/dbServices.js";
 import { ExtendedRequest } from "../../shared/types.js";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js";
 import { verify_and_validate_email } from "../../services/email/verification.js";
+import { upload_picture } from "../../services/upload_picture.js";
 
 // Routes for managing company data
 
@@ -15,6 +16,9 @@ import { verify_and_validate_email } from "../../services/email/verification.js"
  */
 export async function add_company(req: ExtendedRequest, res: Response) {
     const { name, location, email, size, website, roles, skills } = req.body;
+    if (!req.file) {
+        throw new Error("Picture is Required");
+    }
 
     // Validate user existence
     if (!req.user) {
@@ -41,10 +45,12 @@ export async function add_company(req: ExtendedRequest, res: Response) {
         }
     }
 
+    const picture_url = await upload_picture(req.file);
+
     // Save company and related data to the database
     let company_id: number;
     try {
-        const { id } = await Company.save_company(name, location, size == undefined ? 0 : size, website == undefined ? "" : website);
+        const { id } = await Company.save_company(name, location, size == undefined ? 0 : size, website == undefined ? "" : website, picture_url);
         company_id = id;
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError && error.code === "P2002") {
@@ -86,6 +92,7 @@ export async function add_company(req: ExtendedRequest, res: Response) {
    */
     req.body.roles = saved_roles;
     req.body.skills = saved_skills;
+    req.body.picture = picture_url;
 
     res.status(201).json({
         id: company_id,
