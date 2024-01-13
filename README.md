@@ -1,9 +1,6 @@
-# Finding and Approaching Leads is really a hard task, isn't it?
-
-**warminder**
-
-- saves your time, as a student or professional you can outreach your leads on autopilot.
-- traditional bulk mailing tools costs $100s of dollars, and isn't pocket friendly for students
-- one stop solution for cold mailing HRs
-- easy to use
-- more features in future...
+## Send emails cold enough to chill Antarctica.
+- **warminder:** Your all-in-one **FREE**, **AI-powered** cold emailing tool that makes lead gen a breeze.
+- **Stop wasting hours**, warminder puts your outreach on autopilot, freeing you to **focus on important task**.
+- **Ditch expensive bulk mailing tools**: warminder is affordable and **designed for students** (no credit card required!).
+- **Easy to use, yet powerful**: Send targeted emails like a pro, even if you're new to outreach.
+- **The future is bright**: We're constantly adding new features to help you **crush your lead goals**.
