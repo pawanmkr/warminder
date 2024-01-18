@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS "company" (
+CREATE TABLE IF NOT EXISTS "companies" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" text,
 	"location" text,
@@ -19,13 +19,13 @@ CREATE TABLE IF NOT EXISTS "company_skill" (
 	"skill_id" integer
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "deactivated" (
+CREATE TABLE IF NOT EXISTS "deactivated_users" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "email" (
+CREATE TABLE IF NOT EXISTS "emails" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"email" text,
 	"upvote" integer DEFAULT 0,
@@ -36,34 +36,35 @@ CREATE TABLE IF NOT EXISTS "email" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "federated_credentials" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"provider" text,
 	"access_token" text,
 	"refresh_token" text,
 	"user_id" integer,
+	CONSTRAINT "federated_credentials_id_unique" UNIQUE("id"),
 	CONSTRAINT "federated_credentials_access_token_unique" UNIQUE("access_token"),
 	CONSTRAINT "federated_credentials_refresh_token_unique" UNIQUE("refresh_token")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "role" (
+CREATE TABLE IF NOT EXISTS "roles" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"role" text,
-	CONSTRAINT "role_role_unique" UNIQUE("role")
+	CONSTRAINT "roles_role_unique" UNIQUE("role")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "session" (
+CREATE TABLE IF NOT EXISTS "sessions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer,
 	"token" text,
 	"expiry" bigint,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "session_token_unique" UNIQUE("token")
+	CONSTRAINT "sessions_token_unique" UNIQUE("token")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "skill" (
+CREATE TABLE IF NOT EXISTS "skills" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"skill" text,
-	CONSTRAINT "skill_skill_unique" UNIQUE("skill")
+	CONSTRAINT "skills_skill_unique" UNIQUE("skill")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
@@ -80,43 +81,43 @@ CREATE TABLE IF NOT EXISTS "users" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "company_role" ADD CONSTRAINT "company_role_company_id_company_id_fk" FOREIGN KEY ("company_id") REFERENCES "company"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "company_role" ADD CONSTRAINT "company_role_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "company_role" ADD CONSTRAINT "company_role_role_id_role_id_fk" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "company_role" ADD CONSTRAINT "company_role_role_id_roles_id_fk" FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "company_skill" ADD CONSTRAINT "company_skill_company_id_company_id_fk" FOREIGN KEY ("company_id") REFERENCES "company"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "company_skill" ADD CONSTRAINT "company_skill_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "company_skill" ADD CONSTRAINT "company_skill_skill_id_skill_id_fk" FOREIGN KEY ("skill_id") REFERENCES "skill"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "company_skill" ADD CONSTRAINT "company_skill_skill_id_skills_id_fk" FOREIGN KEY ("skill_id") REFERENCES "skills"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "deactivated" ADD CONSTRAINT "deactivated_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "deactivated_users" ADD CONSTRAINT "deactivated_users_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "email" ADD CONSTRAINT "email_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "emails" ADD CONSTRAINT "emails_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "email" ADD CONSTRAINT "email_company_id_company_id_fk" FOREIGN KEY ("company_id") REFERENCES "company"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "emails" ADD CONSTRAINT "emails_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -128,7 +129,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "session" ADD CONSTRAINT "session_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

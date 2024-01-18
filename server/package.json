@@ -11,8 +11,8 @@
     "lint": "eslint --fix .",
     "prepare": "husky install",
     "migrate": "yarn prisma migrate dev",
-    "migration:push": "yarn prisma db push",
-    "migration:generate": "drizzle-kit generate:pg --schema=./src/apps/company/services/db.ts"
+    "migrations:push": "yarn prisma db push",
+    "migrations:generate": "yarn drizzle-kit generate:pg"
   },
   "author": "Pawan Kumar",
   "license": "ISC",

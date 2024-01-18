@@ -1,6 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { Google_User_Profile } from "../../../../types/google.js";
 import { User_With_Federated_Credentials } from "../../../../types/user.js";
+import db from "../../../configs/postgres.js";
+import {eq, sql} from "drizzle-orm";
+import {federated_credentials, users} from "../../../schema/schema.js";
+import {QueryResult} from "pg";
 
 const prisma = new PrismaClient();
 
@@ -42,41 +46,43 @@ export class User {
    * @returns The created user object.
    */
     static async register_new_user(profile: Google_User_Profile, access_token: string, refresh_token: string) {
-        const user = await prisma.users.create({
-            data: {
-                name: profile.name,
-                email: profile.email,
-                picture: profile.picture
-            }
-        });
+        const user =
+            await db
+                .insert(users)
+                .values({ name: profile.name, email: profile.email, picture: profile.picture })
+                .returning();
 
         if (user) {
-            await prisma.federated_credentials.create({
-                data: {
-                    id: profile.id,
-                    provider: "google",
-                    access_token: access_token,
-                    refresh_token: refresh_token,
-                    user_id: user.id
-                }
+            await db.insert(federated_credentials).values({
+                id: profile.id,
+                provider: "google",
+                access_token: access_token,
+                refresh_token: refresh_token,
+                user_id: user[0].id
             });
         }
+
         return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            picture: user.picture
+            id: user[0].id,
+            name: user[0].name,
+            email: user[0].email,
+            picture: user[0].picture
         };
     }
 
+
     static async find_existing_federated_credentials_with_user_details(id: string, provider: string) {
-        const res: User_With_Federated_Credentials[] = await prisma.$queryRawUnsafe(
-            `SELECT users.id
-                        FROM "user".users
-                        JOIN "user".federated_credentials ON users.id = federated_credentials.user_id
-                    WHERE "user".federated_credentials.id = '${id}' AND "user".federated_credentials.provider = '${provider}';`
-        );
-        return res[0];
+        try {
+            const res = await db.execute(sql`
+                SELECT users.id
+                FROM ${users}
+                JOIN ${federated_credentials} ON ${users.id} = ${federated_credentials.user_id}
+                WHERE ${federated_credentials.id} = ${id} AND ${federated_credentials.provider} = ${provider};`
+            );
+            return res.rows[0];
+        } catch (e) {
+            throw new Error("Failed Finding Existing Federated Credentials with User Details.\n" + e);
+        }
     }
 
     /**
@@ -86,9 +92,8 @@ export class User {
    * @returns The user object with specified fields.
    */
     static async get_user_by_id(id: number) {
-        return prisma.users.findUnique({
-            where: { id }
-        });
+        const res = await db.select().from(users).where(eq(users.id, id));
+        return res[0];
     }
 
     static async get_user_with_federated_credentials(id: number) {

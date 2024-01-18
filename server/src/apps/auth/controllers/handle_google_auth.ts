@@ -35,20 +35,18 @@ export async function handle_google_oauth(req: Request, res: Response) {
         }
 
         // Step 3: Check if the user already exists in your database
-        const existing_user =
-            await User.find_existing_federated_credentials_with_user_details(profile.id, "google");
+        let user;
+        user = await User.find_existing_federated_credentials_with_user_details(profile.id, "google");
 
         // Step 4: If the user doesn't exist, register a new user
-        if (!existing_user) {
-            const registered_user =
-                await User.register_new_user(profile, access_token, refresh_token);
-            return res.status(201).json(registered_user);
+        if (!user) {
+            user = await User.register_new_user(profile, access_token, refresh_token);
         }
 
         // create jwt token and send in response
         const token =
             jwt.sign(
-                { user_id: existing_user.id },
+                { user_id: user.id },
                 config.jwtSecret
             );
         return res.status(201).send(token);
