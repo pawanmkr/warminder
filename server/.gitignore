@@ -135,3 +135,6 @@ src/.DS_Store
 
 .idea/
 pnpm-lock.yaml
+
+leads.js
+mail.js

@@ -7,6 +7,7 @@ import path from "path";
 import config from "../configs/config.js";
 import { authRouter, mail_router } from "./apps/auth/index.js";
 import { company_router } from "./apps/company/routes.js";
+import {check_connection} from "./configs/postgres.js";
 
 const app = express();
 
@@ -48,3 +49,5 @@ if (!fs.existsSync(dir)) {
 app.listen(config.port, () => {
     console.log("> Server is listening on port:", config.port);
 });
+
+check_connection();

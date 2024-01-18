@@ -7,6 +7,7 @@ const config = {
     port: 10000,
     jwtSecret: "lakjdsfkajsdnflaoidkjfaisdfjkasdf",
     database: {
+        connection_string: process.env.DATABASE_URL,
         host: process.env.POSTGRES_HOST,
         username: process.env.POSTGRES_USERNAME,
         password: process.env.POSTGRES_PASSWORD,
