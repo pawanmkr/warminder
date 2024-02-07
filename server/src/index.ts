@@ -7,7 +7,8 @@ import path from "path";
 import config from "../configs/config.js";
 import { authRouter, mail_router } from "./apps/auth/index.js";
 import { company_router } from "./apps/company/routes.js";
-import {check_connection} from "./configs/postgres.js";
+import { check_connection } from "./configs/postgres.js";
+import campaign_router from "./routes/campaign.route.js";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.use("/api/auth", authRouter);
 app.use("/api/company", company_router);
 app.use("/api/mail", mail_router);
+app.use("/api/campaign", campaign_router);
 
 const dir = path.join(path.join(process.cwd()), "/uploads");
 if (!fs.existsSync(dir)) {

@@ -1,4 +1,4 @@
-import {bigint, integer, pgTable, serial, text, timestamp, varchar} from "drizzle-orm/pg-core";
+import { bigint, integer, jsonb, pgTable, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
     id: serial("id").primaryKey(),
@@ -8,7 +8,7 @@ export const users = pgTable("users", {
     phone_number: varchar("phone_number", { length: 10 }).unique(),
     picture: text("picture").default(""),
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-    updated_at: timestamp("updated_at", {withTimezone: true}).defaultNow().notNull(),
+    updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
 export const sessions = pgTable("sessions", {
@@ -41,7 +41,7 @@ export const companies = pgTable("companies", {
     website: text("website").default(""),
     picture: text("picture").default(""),
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-    updated_at: timestamp("updated_at", {withTimezone: true}).defaultNow().notNull(),
+    updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
 export const emails = pgTable("emails", {
@@ -72,4 +72,10 @@ export const roles = pgTable("roles", {
 export const company_role = pgTable("company_role", {
     company_id: integer("company_id").references(() => companies.id, { onDelete: "cascade" }),
     role_id: integer("role_id").references(() => roles.id, { onDelete: "cascade" }),
+});
+
+export const user_campaigns = pgTable("user_campaigns", {
+    id: serial("id").primaryKey(),
+    user_id: integer("user_id").references(() => users.id, { onDelete: "cascade" }),
+    rows: jsonb("rows").notNull(),
 });

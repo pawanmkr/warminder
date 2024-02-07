@@ -12,12 +12,12 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: any, file: any, cb: any) => {
-    const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
 
     if (allowedMimeTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error("Only image/jpeg and image/png are allowed."), false);
+        cb(new Error("Only image/jpeg, image/png and xlsx are allowed."), false);
     }
 };
 

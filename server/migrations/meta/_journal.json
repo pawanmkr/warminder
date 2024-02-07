@@ -8,6 +8,20 @@
       "when": 1705587807014,
       "tag": "0000_bizarre_doctor_octopus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1706943167564,
+      "tag": "0001_solid_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1706943343942,
+      "tag": "0002_jittery_black_knight",
+      "breakpoints": true
     }
   ]
 }

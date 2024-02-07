@@ -88,7 +88,7 @@ export class Company {
    * @returns An array of company objects with limited fields.
    */
     static async get_all_the_companies() {
-        return db.execute(sql`
+        const res = await db.execute(sql`
             SELECT
                 c.id,
                 c.name,
@@ -98,12 +98,13 @@ export class Company {
                 c.location,
                 array_remove(array_agg(distinct (r.role)), NULL) AS roles,
                 array_remove(array_agg(distinct (s.skill)), NULL) AS skills
-            FROM company.companies c
-            LEFT JOIN company.company_roles cr ON c.id = cr.company_id
-            LEFT JOIN company.roles r ON cr.role_id = r.id
-            LEFT JOIN company.company_skills cs ON c.id = cs.company_id
-            LEFT JOIN company.skills s ON cs.skill_id = s.id
+            FROM companies c
+            LEFT JOIN company_role cr ON c.id = cr.company_id
+            LEFT JOIN roles r ON cr.role_id = r.id
+            LEFT JOIN company_skill cs ON c.id = cs.company_id
+            LEFT JOIN skills s ON cs.skill_id = s.id
             GROUP BY c.id;`
         );
+        return res.rows;
     }
 }
