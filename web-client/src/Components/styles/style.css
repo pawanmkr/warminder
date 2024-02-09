@@ -310,4 +310,56 @@
   outline: none;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.campaign-container {
+  width: 85%;
+  display: flex;
+}
+.campaign-container .saved-campaigns {
+  flex: 3;
+  padding: 20px;
+}
+.campaign-container .saved-campaigns h1 {
+  margin: 0 0 10px 0;
+}
+.campaign-container .saved-campaigns .campaign-item {
+  color: #1532f1;
+}
+.campaign-container .saved-campaigns .campaign-item:hover {
+  cursor: pointer;
+  background-color: #ffc229;
+}
+.campaign-container form {
+  flex: 1;
+  padding: 20px;
+  background-color: rgb(232, 232, 232);
+}
+.campaign-container form h1 {
+  margin: 0 0 10px 0;
+}
+.campaign-container form .form-fields {
+  display: flex;
+  flex-direction: column;
+}
+.campaign-container form .form-fields input, .campaign-container form .form-fields button {
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  outline: none;
+}
+.campaign-container form .form-fields input {
+  border: 2px solid rgb(208, 208, 208);
+}
+.campaign-container form .form-fields button {
+  background-color: black;
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+.campaign-container form .form-fields button:hover {
+  cursor: pointer;
+  background-color: #ffc229;
+  color: black;
+  border: none;
 }/*# sourceMappingURL=style.css.map */

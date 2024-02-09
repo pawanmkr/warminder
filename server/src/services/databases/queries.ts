@@ -14,17 +14,28 @@ export class Campaign {
       .where(eq(user_campaigns.user_id, id));
   }
 
-  static async save_sheet(user_id: number, rows: any) {
-    await db.insert(user_campaigns).values({ user_id, rows });
+  static async save_sheet(user_id: number, name: string, rows: any) {
+    await db
+      .insert(user_campaigns)
+      .values({
+        user_id,
+        campaign_name: name,
+        rows
+      });
   }
 
   static async find_all_user_sheets(user_id: number) {
-    return db
-      .select({
-        campaigns: user_campaigns.rows
-      })
-      .from(user_campaigns)
-      .where(eq(user_campaigns.user_id, user_id));
+    const res =
+      await db
+        .select({
+          id: user_campaigns.id,
+          name: user_campaigns.campaign_name,
+          rows: user_campaigns.rows
+        })
+        .from(user_campaigns)
+        .where(eq(user_campaigns.user_id, user_id));
+
+    return res;
   }
 }
 

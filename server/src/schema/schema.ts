@@ -117,6 +117,7 @@ export const company_role = pgTable("company_role", {
 
 export const user_campaigns = pgTable("user_campaigns", {
   id: serial("id").primaryKey(),
+  campaign_name: text("campaign_name").notNull(),
   user_id: integer("user_id").references(() => users.id, {
     onDelete: "cascade",
   }),

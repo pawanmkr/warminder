@@ -29,6 +29,13 @@
       "when": 1707487313691,
       "tag": "0003_glorious_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1707505653127,
+      "tag": "0004_young_hex",
+      "breakpoints": true
     }
   ]
 }

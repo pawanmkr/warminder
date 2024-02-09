@@ -1,0 +1,1 @@
+ALTER TABLE "user_campaigns" ADD COLUMN "campaign_name" text NOT NULL;

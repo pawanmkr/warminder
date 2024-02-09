@@ -11,7 +11,7 @@ export interface Template {
     attachments: string
 }
 
-interface Payload extends JwtPayload {
+export interface Payload extends JwtPayload {
     user_id: number
 }
 

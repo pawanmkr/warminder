@@ -2,8 +2,10 @@ import Excel from "exceljs";
 import { Campaign } from "../services/databases/queries.js";
 import { Request, Response } from "express";
 
+
 export async function handle_sheet_upload(req: Request, res: Response) {
-  const { user_id } = req.body;
+  const user_id = parseInt(req.query.user_id as string);
+  const { name } = req.body;
 
   if (!req.file) {
     return res
@@ -14,9 +16,8 @@ export async function handle_sheet_upload(req: Request, res: Response) {
   }
   const rows = await get_column_titles_and_rows(req.file.path);
 
-  await Campaign.save_sheet(user_id, rows);
-
-  return res.send(200);
+  await Campaign.save_sheet(user_id, name, rows);
+  return res.sendStatus(201);
 }
 
 

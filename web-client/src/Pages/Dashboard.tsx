@@ -13,7 +13,7 @@ export type Components = {
 const Dashboard = () => {
     const components: Components = {
         stats: <DashboardStats />,
-        campaign: <Campaign />,
+        campaigns: <Campaign />,
         templates: <Templates />,
     };
 
