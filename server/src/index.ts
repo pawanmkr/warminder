@@ -4,11 +4,14 @@ import cors from "cors";
 import * as fs from "fs";
 import path from "path";
 
+
 import config from "../configs/config.js";
 import { authRouter, mail_router } from "./apps/auth/index.js";
 import { company_router } from "./apps/company/routes.js";
 import { check_connection } from "./configs/postgres.js";
 import campaign_router from "./routes/campaign.route.js";
+import template_router from "./routes/template.route.js";
+
 
 const app = express();
 
@@ -20,10 +23,8 @@ app.use((req: Request, res: Response, next) => {
   }
   next();
 });
-
 app.use(morgan("dev"));
 app.use(express.json());
-
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   // Log the error for debugging
   console.error(err.stack);
@@ -32,11 +33,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ error: "Something went wrong" });
   next();
 });
-
 app.use("/api/auth", authRouter);
 app.use("/api/company", company_router);
 app.use("/api/mail", mail_router);
 app.use("/api/campaign", campaign_router);
+app.use("/api/templates", template_router);
+
 
 const dir = path.join(path.join(process.cwd()), "/uploads");
 if (!fs.existsSync(dir)) {
@@ -48,8 +50,10 @@ if (!fs.existsSync(dir)) {
   });
 }
 
+
 app.listen(config.port, () => {
   console.log("> Server is listening on port:", config.port);
 });
+
 
 check_connection();

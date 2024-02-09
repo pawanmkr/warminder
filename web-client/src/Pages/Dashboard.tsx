@@ -1,9 +1,9 @@
 import { useState, ReactNode } from "react";
 import DashboardStats from "../Components/DashboardStats";
 import Sidebar from "../Components/Sidebar";
-import Editor from "../Components/Rte";
 import "./styles/style.css";
 import Campaign from "../Components/Campaign";
+import Templates from "../Components/Templates";
 
 // Define a type for your components object
 export type Components = {
@@ -14,7 +14,7 @@ const Dashboard = () => {
     const components: Components = {
         stats: <DashboardStats />,
         campaign: <Campaign />,
-        templates: <Editor />,
+        templates: <Templates />,
     };
 
     // Use the Components type for the state

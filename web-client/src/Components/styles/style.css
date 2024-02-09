@@ -14,7 +14,7 @@
 
 .sidebar {
   background-color: rgb(232, 232, 232);
-  width: 20%;
+  width: 15%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -260,9 +260,32 @@
   cursor: pointer;
 }
 
+.templates-container {
+  width: 85%;
+  display: flex;
+}
+.templates-container .templates {
+  flex: 1;
+  padding: 20px;
+  background-color: rgb(232, 232, 232);
+}
+.templates-container .templates h1 {
+  margin: 0 0 10px 0;
+}
+.templates-container .templates .template-item {
+  color: #1532f1;
+}
+.templates-container .templates .template-item:hover {
+  cursor: pointer;
+  background-color: #ffc229;
+}
+
 .editor-form {
-  width: 50%;
-  padding: 0 25px;
+  flex: 2;
+  padding: 20px;
+}
+.editor-form h1 {
+  margin: 0 0 10px 0;
 }
 .editor-form form {
   display: flex;

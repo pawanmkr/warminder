@@ -12,3 +12,11 @@ export type UserUpdate = {
   phone: string;
   password: string;
 };
+
+// T in beginning stads for type
+export type TTemplate = {
+  id?: number
+  subject: string
+  body: string
+  attachments: string[]
+}

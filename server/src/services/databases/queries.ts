@@ -1,6 +1,7 @@
 import { count, eq } from "drizzle-orm";
 import db from "../../configs/postgres.js";
-import { user_campaigns } from "../../schema/schema.js";
+import { templates, user_campaigns, user_templates } from "../../schema/schema.js";
+import { TTemplate } from "../../shared/types.js";
 
 
 export class Campaign {
@@ -24,5 +25,44 @@ export class Campaign {
       })
       .from(user_campaigns)
       .where(eq(user_campaigns.user_id, user_id));
+  }
+}
+
+
+export class Template {
+  static async get_all_templates_by_user_id(user_id: number) {
+    return db
+      .select({
+        id: templates.id,
+        subject: templates.subject,
+        body: templates.body,
+        attachments: templates.attachments
+      })
+      .from(templates)
+      .leftJoin(user_templates, eq(templates.id, user_templates.template_id))
+      .where(eq(user_templates.user_id, user_id))
+      .execute();
+  }
+
+  static async create_new_template(user_id: number, template: TTemplate) {
+    const tmp = await db
+      .insert(templates)
+      .values({
+        subject: template.subject,
+        body: template.body,
+        attachments: template.attachments
+      })
+      .returning();
+
+    console.log(tmp);
+
+    await db
+      .insert(user_templates)
+      .values({
+        user_id: user_id,
+        template_id: tmp[0].id
+      });
+
+    return tmp[0];
   }
 }
