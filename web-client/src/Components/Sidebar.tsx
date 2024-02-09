@@ -5,13 +5,13 @@ import "./styles/style.css";
 import { Components } from "../Pages/Dashboard";
 
 type User = {
-    name: string,
-    picture: string
-}
+    name: string;
+    picture: string;
+};
 
 interface SidebarProps {
-    components: Components
-    setCurrent: React.Dispatch<React.SetStateAction<ReactNode>>
+    components: Components;
+    setCurrent: React.Dispatch<React.SetStateAction<ReactNode>>;
 }
 
 const Sidebar = ({ components, setCurrent }: SidebarProps) => {
@@ -26,22 +26,24 @@ const Sidebar = ({ components, setCurrent }: SidebarProps) => {
         async function fetchProfile() {
             const jwt = localStorage.getItem("jwt");
             if (jwt) {
-                const res = await axios
-                    .get(`${import.meta.env.VITE_SERVER}/auth/user`, {
+                const res = await axios.get(
+                    `${import.meta.env.VITE_SERVER}/auth/user`,
+                    {
                         headers: {
-                            'Authorization': `Bearer ${jwt}`
-                        }
-                    });
+                            Authorization: `Bearer ${jwt}`,
+                        },
+                    },
+                );
                 setProfile(res.data);
             } else {
                 throw new Error("Failed to fetch user profile.");
             }
         }
         fetchProfile();
-    }, [setProfile])
+    }, [setProfile]);
 
     return (
-        <div className="sidebar" >
+        <div className="sidebar">
             <div className="profile">
                 {profile !== undefined ? (
                     <>
@@ -59,18 +61,46 @@ const Sidebar = ({ components, setCurrent }: SidebarProps) => {
 
             <div className="menus">
                 <div className="up">
-                    <button id="stats" onClick={handleTabChange} className="dashboard menu-option">Dashboard</button>
-                    <button id="companies" onClick={handleTabChange} className="Companies menu-option">Companies</button>
-                    <button id="contribution-form" onClick={handleTabChange} className="contribute menu-option">Contribute</button>
-                    <button onClick={handleTabChange} className="send-mails menu-option">Send Mails</button>
-                    <button onClick={handleTabChange} className="my-list menu-option">My Lists</button>
+                    <button
+                        id="stats"
+                        onClick={handleTabChange}
+                        className="dashboard menu-option"
+                    >
+                        Dashboard
+                    </button>
+                    <button
+                        id="campaigns"
+                        onClick={handleTabChange}
+                        className="campaigns menu-option"
+                    >
+                        Campaigns
+                    </button>
+                    <button
+                        id="templates"
+                        onClick={handleTabChange}
+                        className="templates menu-option"
+                    >
+                        Templates
+                    </button>
+                    <button onClick={handleTabChange} className="send-mails menu-option">
+                        Send Mails
+                    </button>
+                    <button onClick={handleTabChange} className="my-list menu-option">
+                        My Lists
+                    </button>
                 </div>
                 <div className="bottom">
-                    <button onClick={handleTabChange} className="settings menu-option last-option">Settings</button>
+                    <button
+                        onClick={handleTabChange}
+                        className="settings menu-option last-option"
+                    >
+                        Settings
+                    </button>
                 </div>
             </div>
-        </div >
-    )
-}
+        </div>
+    );
+};
 
 export default Sidebar;
+

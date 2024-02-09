@@ -1,9 +1,9 @@
-import { useState, ReactNode } from 'react';
-import DashboardStats from '../Components/DashboardStats';
-import Sidebar from '../Components/Sidebar';
-import Companies from '../Components/companies/Companies';
+import { useState, ReactNode } from "react";
+import DashboardStats from "../Components/DashboardStats";
+import Sidebar from "../Components/Sidebar";
+import Editor from "../Components/Rte";
 import "./styles/style.css";
-import ContributionForm from '../Components/companies/ContributionForm';
+import Campaign from "../Components/Campaign";
 
 // Define a type for your components object
 export type Components = {
@@ -12,10 +12,10 @@ export type Components = {
 
 const Dashboard = () => {
     const components: Components = {
-        "stats": <DashboardStats />,
-        "companies": <Companies />,
-        "contribution-form": <ContributionForm />
-    }
+        stats: <DashboardStats />,
+        campaign: <Campaign />,
+        templates: <Editor />,
+    };
 
     // Use the Components type for the state
     const [current, setCurrent] = useState<ReactNode>(components["stats"]);
@@ -25,7 +25,7 @@ const Dashboard = () => {
             <Sidebar components={components} setCurrent={setCurrent} />
             {current}
         </div>
-    )
-}
+    );
+};
 
 export default Dashboard;

@@ -1,6 +1,7 @@
 $light-grey: rgb(232, 232, 232);
 $yellow: #ffc229;
 $gray: rgb(208, 208, 208);
+$outline: #CCCCCC;
     
 .sign-in-btn {
     height: fit-content;
@@ -317,4 +318,39 @@ $gray: rgb(208, 208, 208);
             cursor: pointer;
         }
     }
+}
+
+.editor-form {
+    width: 50%;
+    padding: 0 25px;
+
+    form {
+        display: flex;
+        flex-direction: column;
+
+        background-color: $light-grey;
+        padding: 20px;
+        border-radius: 10px;
+
+        label {
+            color: rgb(75, 75, 75);
+            margin-bottom: 5px;
+        }
+
+        .subject, button {
+            padding: 10px 10px;
+            font-size: 1em;
+            border: none;
+            outline: 1px solid $outline;
+            background-color: transparent;
+        }
+
+        button {
+            background-color: #ffc229;
+            outline: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    }
+
 }

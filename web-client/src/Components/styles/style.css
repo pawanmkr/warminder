@@ -258,4 +258,33 @@
   color: black;
   border: none;
   cursor: pointer;
+}
+
+.editor-form {
+  width: 50%;
+  padding: 0 25px;
+}
+.editor-form form {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(232, 232, 232);
+  padding: 20px;
+  border-radius: 10px;
+}
+.editor-form form label {
+  color: rgb(75, 75, 75);
+  margin-bottom: 5px;
+}
+.editor-form form .subject, .editor-form form button {
+  padding: 10px 10px;
+  font-size: 1em;
+  border: none;
+  outline: 1px solid #CCCCCC;
+  background-color: transparent;
+}
+.editor-form form button {
+  background-color: #ffc229;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
 }/*# sourceMappingURL=style.css.map */
