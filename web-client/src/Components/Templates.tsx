@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import Editor from './Rte'
 import { RotatingLines } from "react-loader-spinner";
-import axios from 'axios';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { fetchTemplates } from '../services/api';
 
 export interface Template {
     id: number
@@ -22,18 +22,20 @@ const Templates = () => {
     const [subject, setSubject] = useState('');
 
     useEffect(() => {
-        async function fetchTemplates(user_id: number) {
-            const res = await axios.get(`${import.meta.env.VITE_SERVER}/templates?user_id=${user_id}`);
-            setTemplates(res.data);
-        }
-        const jwt = localStorage.getItem('jwt');
+        const fetchData = async () => {
+            const jwt = localStorage.getItem('jwt');
 
-        if (jwt) {
-            const decoded: Payload = jwtDecode(jwt);
-            setUserId(decoded.user_id);
-            fetchTemplates(decoded.user_id);
-        }
+            if (jwt) {
+                const decoded: Payload = jwtDecode(jwt);
+                setUserId(decoded.user_id);
+                const res = await fetchTemplates(decoded.user_id);
+                setTemplates(res);
+            }
+        };
+
+        fetchData();
     }, [setTemplates, setUserId]);
+
 
     return (
         <div className='templates-container'>

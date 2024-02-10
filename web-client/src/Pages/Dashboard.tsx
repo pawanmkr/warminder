@@ -4,6 +4,7 @@ import Sidebar from "../Components/Sidebar";
 import "./styles/style.css";
 import Campaign from "../Components/Campaign";
 import Templates from "../Components/Templates";
+import Mail from "../Components/Mail";
 
 // Define a type for your components object
 export type Components = {
@@ -15,6 +16,7 @@ const Dashboard = () => {
         stats: <DashboardStats />,
         campaigns: <Campaign />,
         templates: <Templates />,
+        mails: <Mail />
     };
 
     // Use the Components type for the state

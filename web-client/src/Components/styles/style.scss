@@ -1,7 +1,10 @@
 $light-grey: rgb(232, 232, 232);
 $yellow: #ffc229;
+$dark-yellow: #c18a00;
 $gray: rgb(208, 208, 208);
 $outline: #CCCCCC;
+$link: #1532f1;
+$success: green;
     
 .sign-in-btn {
     height: fit-content;
@@ -335,7 +338,7 @@ $outline: #CCCCCC;
         }
 
         .template-item {
-            color:#1532f1; 
+            color: $link; 
         }
 
         .template-item:hover {
@@ -399,7 +402,7 @@ $outline: #CCCCCC;
         }
         
         .campaign-item {
-            color:#1532f1; 
+            color: $link; 
         }
     
         .campaign-item:hover {
@@ -446,5 +449,72 @@ $outline: #CCCCCC;
                 border: none;
             }
         }
+    }
+}
+
+.start-mails-container {
+
+    display: flex;
+    justify-content: space-between;
+    width: 85%;
+
+    h1 {
+        margin: 0;
+    }
+
+    form, .selectors {
+        flex: 1;
+        padding: 20px;
+    }
+
+    form {
+        
+        p {
+            color: $dark-yellow;
+            margin: 5px 0 0 0;
+        }
+
+        button {
+            border: none;
+            padding: 10px 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            background-color: black;
+            color: white;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: $yellow;
+            color: black;
+        }
+
+        .success-message {
+            color: $success;
+        }
+    }
+
+    .selectors {
+        background-color: $light-grey;
+
+        .template-selector, .campaign-selector {
+
+            .template-item, .campaign-item {
+                color: $link;
+            }
+
+            .template-item:hover, .campaign-item:hover {
+                cursor: pointer;
+                background-color: #ffc229;
+            }
+        
+        }
+    
+        .template-selector {
+    
+        }
+    
+        .campaign-selector {}
     }
 }

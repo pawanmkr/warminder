@@ -3,9 +3,10 @@ import { jwtDecode } from 'jwt-decode'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { RotatingLines } from 'react-loader-spinner'
 import { Payload } from './Templates'
+import { fetchCampaigns } from '../services/api'
 
 
-type TCampaign = {
+export type TCampaign = {
     id: number
     name: string
     rows: []
@@ -20,18 +21,19 @@ const Campaign = () => {
     const [name, setName] = useState<string>('');
 
     useEffect(() => {
-        async function fetchTemplates(user_id: number) {
-            const res = await axios.get(`${import.meta.env.VITE_SERVER}/campaign?user_id=${user_id}`);
-            setCampaigns(res.data);
-        }
-        const jwt = localStorage.getItem('jwt');
-        setJwt(jwt);
+        async function fetchData() {
+            const jwt = localStorage.getItem('jwt');
+            setJwt(jwt);
 
-        if (jwt) {
-            const decoded: Payload = jwtDecode(jwt);
-            setUserId(decoded.user_id);
-            fetchTemplates(decoded.user_id);
+            if (jwt) {
+                const decoded: Payload = jwtDecode(jwt);
+                setUserId(decoded.user_id);
+                const res = await fetchCampaigns(decoded.user_id);
+                setCampaigns(res);
+            }
         }
+
+        fetchData();
     }, [setCampaigns, setUserId, setJwt]);
 
     const handleFile = (e: ChangeEvent<HTMLInputElement>) => {

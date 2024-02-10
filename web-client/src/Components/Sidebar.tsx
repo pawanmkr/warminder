@@ -75,6 +75,7 @@ const Sidebar = ({ components, setCurrent }: SidebarProps) => {
                     >
                         Campaigns
                     </button>
+
                     <button
                         id="templates"
                         onClick={handleTabChange}
@@ -82,10 +83,20 @@ const Sidebar = ({ components, setCurrent }: SidebarProps) => {
                     >
                         Templates
                     </button>
-                    <button onClick={handleTabChange} className="send-mails menu-option">
+
+                    <button
+                        id="mails"
+                        onClick={handleTabChange}
+                        className="mails menu-option"
+                    >
                         Send Mails
                     </button>
-                    <button onClick={handleTabChange} className="my-list menu-option">
+
+                    <button
+                        id="my-lists"
+                        onClick={handleTabChange}
+                        className="my-list menu-option"
+                    >
                         My Lists
                     </button>
                 </div>

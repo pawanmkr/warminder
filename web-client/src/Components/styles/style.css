@@ -362,4 +362,48 @@
   background-color: #ffc229;
   color: black;
   border: none;
+}
+
+.start-mails-container {
+  display: flex;
+  justify-content: space-between;
+  width: 85%;
+}
+.start-mails-container h1 {
+  margin: 0;
+}
+.start-mails-container form, .start-mails-container .selectors {
+  flex: 1;
+  padding: 20px;
+}
+.start-mails-container form p {
+  color: #c18a00;
+  margin: 5px 0 0 0;
+}
+.start-mails-container form button {
+  border: none;
+  padding: 10px 25px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1em;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+}
+.start-mails-container form button:hover {
+  background-color: #ffc229;
+  color: black;
+}
+.start-mails-container form .success-message {
+  color: green;
+}
+.start-mails-container .selectors {
+  background-color: rgb(232, 232, 232);
+}
+.start-mails-container .selectors .template-selector .template-item, .start-mails-container .selectors .template-selector .campaign-item, .start-mails-container .selectors .campaign-selector .template-item, .start-mails-container .selectors .campaign-selector .campaign-item {
+  color: #1532f1;
+}
+.start-mails-container .selectors .template-selector .template-item:hover, .start-mails-container .selectors .template-selector .campaign-item:hover, .start-mails-container .selectors .campaign-selector .template-item:hover, .start-mails-container .selectors .campaign-selector .campaign-item:hover {
+  cursor: pointer;
+  background-color: #ffc229;
 }/*# sourceMappingURL=style.css.map */
